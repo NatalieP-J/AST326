@@ -142,12 +142,12 @@ def section8():
     tsamp = 0.003
     nsamp = 1000
     time = timestamp()
-    name = 'section8-' + time + '-{0}-{1}'
+    name = 'section8-' + time + '-{0}-{1}'.format(tsamp,nsamp)
     counts = get_counts(tsamp,nsamp)
     mean = sum(counts)/len(counts)
-    histogram = histogram(counts,name)
-    hr = histogram[0]
-    hist = histogram[1]
+    h = histogram(counts,name)
+    hr = h[0]
+    hist = h[1]
     prob = []
     total_hist = sum(hist)
     for i in range(len(hist)):
