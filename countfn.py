@@ -231,11 +231,11 @@ def section9new(nmax):
         mean = []
         std = []
         for k in range(15):
-            name = 'section9-' + time + '-{0}-{1}_{2}'.format(tsamp,nsamp,k+1)
-            counts = get_counts(tsamp,nsamp[j])
+            name = 'section9-' + time + '-{0}-{1}_{2}'.format(tsamp,nsamps[j],k+1)
+            counts = get_counts(tsamp,nsamps[j])
             save_data(name,counts)
             mean = float(sum(counts))/len(counts)
-    
+
 
 
     
