@@ -236,6 +236,7 @@ def section9new(nmax):
             counts = get_counts(tsamp,nsamps[j])
             save_data(name,counts)
             mean = float(sum(counts))/len(counts)
+    return counts
 
 
 
