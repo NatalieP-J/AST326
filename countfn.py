@@ -185,6 +185,7 @@ def section8new():
     time = timestamp()
     name = 'section8-' + time + '-{0}-{1}'.format(tsamp,nsamp)
     counts = get_counts(tsamp,nsamp)
+    save_data(name,counts)
     mean = sum(counts)/len(counts)
     h = histogram(counts,name)
     hr = h[0]
