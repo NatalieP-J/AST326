@@ -180,7 +180,7 @@ def poisson(x,mean):
     return newlist
 
 def section8new():
-    tsamp = 0.003
+    tsamp = 0.05
     nsamp = 1000
     time = timestamp()
     name = 'section8-' + time + '-{0}-{1}'.format(tsamp,nsamp)
@@ -236,7 +236,6 @@ def section9new(nmax):
             counts = get_counts(tsamp,nsamps[j])
             save_data(name,counts)
             mean = float(sum(counts))/len(counts)
-    return counts
 
 
 
