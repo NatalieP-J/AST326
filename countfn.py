@@ -137,7 +137,6 @@ def section7(time):
     variance = []
     tsamp = [0.001,0.005,0.01,0.05,0.1,0.5]
     nsamp = 100
-    time = timestamp()
     for i in range(len(tsamp)):
         name = 'section7-' + time + '-{0}-{1}'.format(nsamp,tsamp[i])
         counts = np.loadtxt(name+'.dat')
@@ -145,27 +144,33 @@ def section7(time):
         means.append(mean)
         vals = []
         for j in range(len(counts)):
-            val = (counts[j]-mean)**2
+            val = ((counts[j])-mean)**2
             vals.append(val)
         std = np.sqrt(sum(vals)/(len(vals)-1))
         stds.append(std)
         var = std**2
         variance.append(var)
         total_counts.append(counts)
-    name = 'section7-' + time + '.png'
+    name = 'section7-' + time +  'subplot.png'
     f = plt.figure()
-    plt.plot(means,variance,'-o')
+    ax = plt.subplot(211)
+    ax.set_title("Mean Count vs Variance on a Linear Scale") 
+    ax.plot(means,variance,'o',label = 'mean vs variance')
     x = np.arange(min(means),max(means))
     y = x
-    plt.plot(x,y)
-    plt.savefig(name)
-    plt.show()
-    f = plt.figure()
-    name = 'section7-' + time + '-logplot.png'
-    plt.yscale('log')
-    plt.xscale('log')
-    plt.plot(means,variance,'-o')
-    plt.plot(x,y,'-o')
+    ax.plot(x,y,label = 'x=y')
+    ax.set_xlabel('Mean Count')
+    ax.set_ylabel('Variance')
+    ax = plt.subplot(212)
+    ax.set_title("Mean Count vs Variance on a Log Scale")
+    ax.set_yscale('log')
+    ax.set_xscale('log')
+    ax.plot(means,variance,'o',label = 'mean vs variance')
+    ax.plot(x,y, label = 'x=y')
+    ax.set_xlabel('Mean Count on Log Scale')
+    ax.set_ylabel('Variance on Log Scale')
+    ax.legend(loc='best')
+    plt.tight_layout()
     plt.savefig(name)
     plt.show()
     return means,stds,variance,tsamp
@@ -236,6 +241,52 @@ def section9new(nmax):
             counts = get_counts(tsamp,nsamps[j])
             save_data(name,counts)
             mean = float(sum(counts))/len(counts)
+
+def section9(nmax,time):
+    pts = []
+    nsamps = []
+    for i in range(1,nmax+1):
+        n=2**i
+        print n
+        nsamps.append(n)
+    tsamp = 0.01
+    for j in range(len(nsamps)):
+        means = []
+        stds = []
+        for k in range(15):
+            sqrs = []
+            name = 'section9-'+time+'-{0}-{1}_{2}'.format(tsamp,nsamps[j],k+1)
+            data = np.loadtxt(name+'.dat')
+            for d in range(len(data)):
+                r = 0
+                if data[d]>50:
+                    np.delete(data,d)
+                    r+=1
+                if r>0:
+                    print 'removed {0} outliers'.format(r)
+            avg = float(sum(data))/len(data)
+            means.append(avg)
+            for i in range(len(data)):
+                sqr = (float(data[i])-avg)**2
+                sqrs.append(sqr)
+            std = np.sqrt((sum(sqrs))/(len(sqrs)-1))
+            stds.append(std)
+        mom = float(sum(means))/len(means)
+        means.append(mom)
+        totsqrs=[]
+        for m in range(len(stds)):
+            sqr = (float(stds[m])-avg)**2
+            totsqrs.append(sqr)
+        sdom = np.sqrt((sum(totsqrs))/len(totsqrs)-1)
+        point = [mom,sdom,nsamps[j]]
+        pts.append(point)
+    return pts
+
+        
+            
+            
+    
+
 
 
 
