@@ -299,6 +299,8 @@ def section9new(nmax):
 def section9(nmax,time):
     pts = []
     nsamps = []
+    predict = []
+    moms = []
     for i in range(1,nmax+1):
         n=2**i
         print n
@@ -326,14 +328,28 @@ def section9(nmax,time):
             std = np.sqrt((sum(sqrs))/(len(sqrs)-1))
             stds.append(std)
         mom = float(sum(means))/len(means)
-        means.append(mom)
+        moms.append(mom)
         totsqrs=[]
+        val = float(sum(stds)/len(stds))
+        print val
         for m in range(len(stds)):
-            sqr = (float(stds[m])-avg)**2
+            sqr = (stds[m]-val)**2
             totsqrs.append(sqr)
-        sdom = np.sqrt((sum(totsqrs))/len(totsqrs)-1)
+        print sum(totsqrs),len(totsqrs),j
+        sdom = np.sqrt(sum(totsqrs)/(len(totsqrs)-1))
+        sdom = val/np.sqrt(nsamps[j])
         point = [mom,sdom,nsamps[j]]
         pts.append(point)
+        pre = []
+        for i in range(len(means)):
+            predict_std = np.sqrt(means[i])
+            pre.append(predict_std)
+        presqrs = []
+        avg = sum(pre)/len(pre)
+        predictsdom = avg/np.sqrt(nsamps[j])
+        predict.append(predictsdom)
+        print 'stds{0}='.format(j), stds
+    print 'predict=',predict
     return pts
 
 mean = [11.166666666666666,
@@ -347,26 +363,51 @@ mean = [11.166666666666666,
     12.473152294035726,
     13.377417410977667]
 
-std = [7.8703862595168204,
-    9.3296379266609026,
-    5.8666185309471919,
-    8.4463164541455242,
-    9.0528164980643702,
-    8.053750791793691,
-    8.4224128028183358,
-    8.542864833663689,
-    9.2018707530769124,
-    10.432847328605778]
+std = [1.8986210534916925,
+    1.0869714925491674,
+    0.82198885932349863,
+    0.66797303645313888,
+    0.55878401974367553,
+    0.32289562462724913,
+    0.27113497308186602,
+    0.2209633826330315,
+    0.098486653654511619,
+    0.11244532282960551]
 
 nsamp = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
 
+predict= [0.067488882675193762, 
+        0.23781641715913096, 
+        0.35340043300542923, 
+        0.08099173787387802, 
+        0.14547874551726847, 
+        0.020731233035945144, 
+        0.018453900220719983, 
+        0.0046901457184241905, 
+        0.052911022184930039, 
+        0.11571141463783768]
+
+predict = [2.3373915313460754, 1.6528907097169716, 1.1887096960872059, 0.8442058219535119, 0.60015477428651642, 0.42869671226694905, 0.30381201523892476, 0.21734787237850098, 0.15607661972824169, 0.11428625444222892]
+std = [1.9666666666666663,
+ 1.5879349009259869,
+ 1.1409111661949083,
+ 0.86417719774040147,
+ 0.60247831977942778,
+ 0.43942516304591184,
+ 0.30582150408519387,
+ 0.22040346068516439,
+ 0.15823186984664031,
+ 0.11640214503365261]
+
 f = plt.figure()
 ax = plt.subplot(121)
-ax.plot(nsamp,mean,'o',color='blue')
+ax.plot(nsamp,mean,'o',markersize=8,color='blue')
 plt.ylabel('Mean of the Mean For 15 Trials')
 plt.xlabel('Number of Samples') 
 ax = plt.subplot(122)
-ax.plot(nsamp,std,'o',color='orange')
+ax.plot(nsamp,std,'o',color='orange',markersize=8,label='Standard Deviation \nof the Mean')
+ax.plot(nsamp,predict,linewidth=2,color='green',markersize=8,label='Predicted Standard \nDeviation of the Mean')
+ax.legend(loc='best',prop = {'size':12})
 plt.ylabel('Standard Deviation of the Mean for 15 Trials')
 plt.xlabel('Number of Samples') 
 plt.tight_layout()

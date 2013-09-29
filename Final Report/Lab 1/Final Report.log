@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  29 SEP 2013 16:48
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  29 SEP 2013 18:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -409,19 +409,11 @@ File: s_section8_2_crop1.pdf Graphic file (type pdf)
 Package pdftex.def Info: s_section8_2_crop1.pdf used on input line 173.
 (pdftex.def)             Requested size: 452.9679pt x 284.69144pt.
 
-<mean_of_means.pdf, id=38, 1003.1096pt x 620.07784pt>
-File: mean_of_means.pdf Graphic file (type pdf)
- <use mean_of_means.pdf>
-Package pdftex.def Info: mean_of_means.pdf used on input line 187.
-(pdftex.def)             Requested size: 452.9679pt x 280.00699pt.
-
-<standard_deviation_of_means.pdf, id=39, 988.65558pt x 614.29622pt>
-File: standard_deviation_of_means.pdf Graphic file (type pdf)
-
-<use standard_deviation_of_means.pdf>
-Package pdftex.def Info: standard_deviation_of_means.pdf used on input line 193
-.
-(pdftex.def)             Requested size: 452.9679pt x 281.45488pt.
+<section9_fix.pdf, id=38, 578.16116pt x 433.62086pt>
+File: section9_fix.pdf Graphic file (type pdf)
+ <use section9_fix.pdf>
+Package pdftex.def Info: section9_fix.pdf used on input line 184.
+(pdftex.def)             Requested size: 452.9679pt x 339.72485pt.
 
 No file "Final Report".bbl.
 [5] [6 <./section5_crop.pdf> <./section6_crop.pdf
@@ -433,34 +425,30 @@ df
 
 pdfTeX warning: pdflatex (file ./s_section8_2_crop1.pdf): PDF inclusion: multip
 le pdfs with page group included in a single page
->] [9 <./mean_of_means.pdf> <./standard_deviation_of_means.pdf
-
-pdfTeX warning: pdflatex (file ./standard_deviation_of_means.pdf): PDF inclusio
-n: multiple pdfs with page group included in a single page
->] (./Final Report.aux) ) 
+>] [9 <./section9_fix.pdf>] (./Final Report.aux) ) 
 Here is how much of TeX's memory you used:
- 5161 strings out of 493488
- 77048 string characters out of 3141326
- 149419 words of memory out of 3000000
- 8395 multiletter control sequences out of 15000+200000
+ 5152 strings out of 493488
+ 76767 string characters out of 3141326
+ 149302 words of memory out of 3000000
+ 8387 multiletter control sequences out of 15000+200000
  11625 words of font info for 42 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
  38i,14n,38p,876b,546s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texlive/2012/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmbx12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmex10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmmi12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmmi8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmr10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr17.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmr8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-sy10.pfb>
-Output written on "Final Report.pdf" (9 pages, 377286 bytes).
+</usr/local/texlive/2012/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2012/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2012/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2012/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2012/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2012/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2012/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2012/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2012/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2012/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmsy10.pfb>
+Output written on "Final Report.pdf" (9 pages, 361470 bytes).
 PDF statistics:
- 135 PDF objects out of 1000 (max. 8388607)
- 89 compressed objects within 1 object stream
+ 128 PDF objects out of 1000 (max. 8388607)
+ 85 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 
