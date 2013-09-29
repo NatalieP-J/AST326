@@ -336,8 +336,42 @@ def section9(nmax,time):
         pts.append(point)
     return pts
 
-        
-            
+mean = [11.166666666666666,
+    10.966666666666667,
+    11.341666666666667,
+    11.4125,
+    11.53125,
+    11.764583333333333,
+    11.816666666666666,
+    12.094010416666666,
+    12.473152294035726,
+    13.377417410977667]
+
+std = [7.8703862595168204,
+    9.3296379266609026,
+    5.8666185309471919,
+    8.4463164541455242,
+    9.0528164980643702,
+    8.053750791793691,
+    8.4224128028183358,
+    8.542864833663689,
+    9.2018707530769124,
+    10.432847328605778]
+
+nsamp = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
+
+f = plt.figure()
+ax = plt.subplot(121)
+ax.plot(nsamp,mean,'o',color='blue')
+plt.ylabel('Mean of the Mean For 15 Trials')
+plt.xlabel('Number of Samples') 
+ax = plt.subplot(122)
+ax.plot(nsamp,std,'o',color='orange')
+plt.ylabel('Standard Deviation of the Mean for 15 Trials')
+plt.xlabel('Number of Samples') 
+plt.tight_layout()
+plt.show()
+         
             
     
 
