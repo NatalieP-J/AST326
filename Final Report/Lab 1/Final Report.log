@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  29 SEP 2013 18:37
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  30 SEP 2013 14:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -234,41 +234,49 @@ LaTeX Info: Redefining \] on input line 2667.
 \l_MT_above_shortintertext_dim=\dimen135
 \l_MT_below_shortintertext_dim=\dimen136
 )
+(/usr/local/texlive/2012/texmf-dist/tex/latex/preprint/authblk.sty
+Package: authblk 2009/11/18 1.3 (PWD)
+\affilsep=\skip55
+\@affilsep=\skip56
+\c@Maxaffil=\count112
+\c@authors=\count113
+\c@affil=\count114
+)
 (./Final Report.aux)
 \openout1 = `"Final Report.aux"'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 14.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 14.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 15.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 15.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    ... okay on input line 15.
 
 (/usr/local/texlive/2012/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count112
+\scratchcounter=\count115
 \scratchdimen=\dimen137
 \scratchbox=\box29
-\nofMPsegments=\count113
-\nofMParguments=\count114
+\nofMPsegments=\count116
+\nofMParguments=\count117
 \everyMPshowfont=\toks22
-\MPscratchCnt=\count115
+\MPscratchCnt=\count118
 \MPscratchDim=\dimen138
-\MPnumerator=\count116
-\makeMPintoPDFobject=\count117
+\MPnumerator=\count119
+\makeMPintoPDFobject=\count120
 \everyMPtoPDFconversion=\toks23
 ) (/usr/local/texlive/2012/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
@@ -350,11 +358,6 @@ e
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-
-Overfull \hbox (11.49644pt too wide) in paragraph at lines 19--19
- [][] 
- []
-
 [1
 
 {/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
@@ -362,93 +365,93 @@ Overfull \hbox (11.49644pt too wide) in paragraph at lines 19--19
 File: section4image.pdf Graphic file (type pdf)
 
 <use section4image.pdf>
-Package pdftex.def Info: section4image.pdf used on input line 82.
+Package pdftex.def Info: section4image.pdf used on input line 83.
 (pdftex.def)             Requested size: 452.9679pt x 339.72485pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [3] [4 <./section4image.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 113--117
+Underfull \hbox (badness 10000) in paragraph at lines 114--118
 
  []
 
-<section5_crop.pdf, id=33, 289.80328pt x 432.89816pt>
+[5] <section5_crop.pdf, id=36, 289.80328pt x 432.89816pt>
 File: section5_crop.pdf Graphic file (type pdf)
- <use section5_crop.pdf>
-Package pdftex.def Info: section5_crop.pdf used on input line 137.
-(pdftex.def)             Requested size: 226.48395pt x 338.31975pt.
 
-<section6_crop.pdf, id=34, 291.24811pt x 433.62pt>
+<use section5_crop.pdf>
+Package pdftex.def Info: section5_crop.pdf used on input line 144.
+(pdftex.def)             Requested size: 226.48395pt x 338.31975pt.
+ <section6_crop.pdf, id=37, 291.24811pt x 433.62pt>
 File: section6_crop.pdf Graphic file (type pdf)
- <use section6_crop.pdf>
-Package pdftex.def Info: section6_crop.pdf used on input line 145.
+
+<use section6_crop.pdf>
+Package pdftex.def Info: section6_crop.pdf used on input line 152.
 (pdftex.def)             Requested size: 226.48395pt x 337.20992pt.
 
-Overfull \hbox (14.61108pt too wide) in paragraph at lines 132--150
+Overfull \hbox (14.61108pt too wide) in paragraph at lines 139--157
 [][] $[]$ 
  []
 
-<section7.pdf, id=35, 578.16116pt x 433.62086pt>
-File: section7.pdf Graphic file (type pdf)
- <use section7.pdf>
-Package pdftex.def Info: section7.pdf used on input line 156.
-(pdftex.def)             Requested size: 452.9679pt x 339.72485pt.
-
-<3ms_section8_2_crop1.pdf, id=36, 530.46178pt x 205.2468pt>
-File: 3ms_section8_2_crop1.pdf Graphic file (type pdf)
-
-<use 3ms_section8_2_crop1.pdf>
-Package pdftex.def Info: 3ms_section8_2_crop1.pdf used on input line 165.
-(pdftex.def)             Requested size: 452.9679pt x 175.26859pt.
-
-<s_section8_2_crop1.pdf, id=37, 517.45322pt x 325.215pt>
-File: s_section8_2_crop1.pdf Graphic file (type pdf)
-
-<use s_section8_2_crop1.pdf>
-Package pdftex.def Info: s_section8_2_crop1.pdf used on input line 173.
-(pdftex.def)             Requested size: 452.9679pt x 284.69144pt.
-
-<section9_fix.pdf, id=38, 578.16116pt x 433.62086pt>
-File: section9_fix.pdf Graphic file (type pdf)
- <use section9_fix.pdf>
-Package pdftex.def Info: section9_fix.pdf used on input line 184.
-(pdftex.def)             Requested size: 452.9679pt x 339.72485pt.
-
-No file "Final Report".bbl.
-[5] [6 <./section5_crop.pdf> <./section6_crop.pdf
+[6 <./section5_crop.pdf> <./section6_crop.pdf
 
 pdfTeX warning: pdflatex (file ./section6_crop.pdf): PDF inclusion: multiple pd
 fs with page group included in a single page
->] [7 <./section7.pdf>] [8 <./3ms_section8_2_crop1.pdf> <./s_section8_2_crop1.p
-df
+>] <section7.pdf, id=54, 578.16116pt x 433.62086pt>
+File: section7.pdf Graphic file (type pdf)
+ <use section7.pdf>
+Package pdftex.def Info: section7.pdf used on input line 167.
+(pdftex.def)             Requested size: 452.9679pt x 339.72485pt.
+ [7 <./section7.pdf>] <3ms_section8_2_crop1.pdf, id=66, 530.46178pt x 205.2468p
+t>
+File: 3ms_section8_2_crop1.pdf Graphic file (type pdf)
+
+<use 3ms_section8_2_crop1.pdf>
+Package pdftex.def Info: 3ms_section8_2_crop1.pdf used on input line 180.
+(pdftex.def)             Requested size: 452.9679pt x 175.26859pt.
+
+<s_section8_2_crop1.pdf, id=67, 517.45322pt x 325.215pt>
+File: s_section8_2_crop1.pdf Graphic file (type pdf)
+
+<use s_section8_2_crop1.pdf>
+Package pdftex.def Info: s_section8_2_crop1.pdf used on input line 188.
+(pdftex.def)             Requested size: 452.9679pt x 284.69144pt.
+ [8 <./3ms_section8_2_crop1.pdf> <./s_section8_2_crop1.pdf
 
 pdfTeX warning: pdflatex (file ./s_section8_2_crop1.pdf): PDF inclusion: multip
 le pdfs with page group included in a single page
->] [9 <./section9_fix.pdf>] (./Final Report.aux) ) 
+>] <section9_fix.pdf, id=84, 578.16116pt x 433.62086pt>
+File: section9_fix.pdf Graphic file (type pdf)
+ <use section9_fix.pdf>
+Package pdftex.def Info: section9_fix.pdf used on input line 207.
+(pdftex.def)             Requested size: 452.9679pt x 339.72485pt.
+
+[9 <./section9_fix.pdf>] [10]
+No file "Final Report".bbl.
+[11] (./Final Report.aux) ) 
 Here is how much of TeX's memory you used:
- 5152 strings out of 493488
- 76767 string characters out of 3141326
- 149302 words of memory out of 3000000
- 8387 multiletter control sequences out of 15000+200000
- 11625 words of font info for 42 fonts, out of 3000000 for 9000
+ 5215 strings out of 493488
+ 77461 string characters out of 3141326
+ 148985 words of memory out of 3000000
+ 8447 multiletter control sequences out of 15000+200000
+ 9710 words of font info for 35 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
- 38i,14n,38p,876b,546s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texlive/2012/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2012/texmf
--dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2012/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2012/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2012/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2012/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2012/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2012/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2012/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2012/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmsy10.pfb>
-Output written on "Final Report.pdf" (9 pages, 361470 bytes).
+ 38i,14n,38p,1101b,546s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2012/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmex10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmmi12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmmi8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmr10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmr17.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmr8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmsy10.pfb>
+Output written on "Final Report.pdf" (11 pages, 368348 bytes).
 PDF statistics:
- 128 PDF objects out of 1000 (max. 8388607)
- 85 compressed objects within 1 object stream
+ 134 PDF objects out of 1000 (max. 8388607)
+ 89 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  36 words of extra memory for PDF output out of 10000 (max. 10000000)
 
