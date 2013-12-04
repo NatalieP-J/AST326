@@ -52,6 +52,7 @@ Table~\ref{tab:datatable} provides a list of the pertinent information found in 
   \begin{tabular}{c||c||c||c||c||c}
    Date (UTC) & Time (UTC) & $\alpha$ (hr) & $\delta$ ($^o$) & Source & Exposure (s)\\
    \hline
+   \hline
    13/10/11 & 03:18:59 & 22:37:18 & +34:26:37 & NGC7331 & 240\\
    07/11/11 & N/A & N/A & N/A & Reduced flat & N/A \\
    18/10/11 & N/A & N/A & N/A & Dark & 240\\
@@ -239,6 +240,7 @@ Using Equation~\ref{eqn:constants}, it was possible to determine the transformat
   \begin{tabular}{c||c||c}
   	Constant & Ideal Value & Calculated Value \\
   	\hline
+  	\hline
   	$a_{11}$ & 1 & 1.00050002 \\
   	$a_{12}$ & 0 & -0.00659824 \\
   	$x_{0}$ & 1024 & 1019.64337372 \\
@@ -293,7 +295,7 @@ Once the coordinates had been transformed to the equatorial system, the points w
 \begin{figure}[!htbp]
 \centering
 \includegraphics[scale = 0.35]{proper_motion.png}
-\caption{Motion in right ascension and declination of 30 Urania over observing time.}
+\caption{Motion in right ascension and declination of 30 Urania over observing time. Error bars are plotted, but are hidden by the markers.}
 \label{fig:pm}
 \end{figure}
 
@@ -304,6 +306,7 @@ Two fits were made, one to the first four points, and another including the last
   \centering
   \begin{tabular}{c||c||c||c||c}
   	Points & $\mu_{\alpha} (^o/hr)$ & $\mu_{\alpha} (''/hr)$ & $\mu_{\delta} (^o/hr)$ & $\mu_{\delta} (''/hr)$ \\
+  	\hline
   	\hline
   	4 & $9.93\e{-3}\pm 4\e{-5}$ & $35.7\pm 0.2$ & $1.74\e{-3}\pm 6\e{-5}$& $6.3\pm 0.2$ \\
   	5 & $1.08\e{-2}\pm 8\e{-4}$ & $39\pm 2$ & $1.9\e{-3}\pm 2\e{-4}$ & $6.8\pm 0.8$ \\
@@ -341,6 +344,7 @@ As a further check of the asteroid coordinates, NASA's Jet Propulsion Laboratory
   \begin{tabular}{c||c||c||c||c||c||c}
   	Day & Identified $\alpha$ & Ephemeris $\alpha$ & Offset (s) & Identified $\delta$ & Ephemeris $\delta$ & Offset ($''$)\\
   	\hline
+  	\hline
   	Jan 20 & 02:57:49.44 & 02:57:49.26 & 0.18 & +19:14:02.7 & +19:14:30.8 & 28.1\\
   	\hline
   	Jan 21 & 02:58:44.30 & 02:58:44.11 & 0.19 & +19:16:34.8 & +19:16:45.1 & -10.3\\
@@ -349,7 +353,7 @@ As a further check of the asteroid coordinates, NASA's Jet Propulsion Laboratory
   	\hline
   	Jan 24 & 03:01:38.39 & 03:01:37.59 & 0.80 & +19:23:56.0 & +19:24:04.0 & -8.0\\
   	\hline
-  	Jan 25 & 03:06:57.74 & 03:02:30.46 & 267 & +19:38:12.9 & +19:26:21.6 & 711\\
+  	Jan 25 & 03:06:57.74 & 03:02:30.46 & 267 & +19:38:12.9 & +19:26:21.6 & 711
    \end{tabular}
     \caption{A comparison of asteroid position as identified within the program and asteroid position according the JPL's ephemeris~\citep{urania}. Dates are all from 2012. By convention, right ascension ($\alpha$) is given in hours, and declination ($\delta$) is given in degrees.}
     \label{tab:position}
@@ -358,7 +362,9 @@ As a further check of the asteroid coordinates, NASA's Jet Propulsion Laboratory
 
 It is obvious from the Table~\ref{tab:position} that for the first four days, the asteroid's position matches the predicted position quite well. However, on the last day, it is clear that the asteroid was completely misidentified. Therefore, final values for proper motion are taken from the fit of the first four points. Both fits were plotted on Figure~\ref{fig:path}, but the scaling is such that they are completely indistinguishable.
 
-The offsets in Table~\ref{tab:position} are outside the errors found in Section~\ref{sec:calc}, where it was found that $\Delta\alpha = 0.890''$ and $\Delta\delta = 0.817''$. This is not entirely unexpected. The ephemeris could only be generated for thirty minute intervals (as any longer time crashed the webpage), and so the observation times had to be rounded to the nearest half hour. For a slow moving star, this would not be a problem, but in the case of 30 Urania, Table~ref{tab:pm} clearly shows that a large shift in arcseconds should be expected even over a short time.
+The offsets in Table~\ref{tab:position} are outside the errors calculated in Section~\ref{sec:calc}, where it was found that $\Delta\alpha = 0.890''$ and $\Delta\delta = 0.817''$. This is not entirely unexpected. The ephemeris could only be generated for thirty minute intervals (as any longer time crashed the webpage), and so the observation times had to be rounded to the nearest half hour. For a slow moving star, this would not be a problem, but in the case of 30 Urania, Table~\ref{tab:pm} clearly shows that a large shift in arcseconds should be expected even over a short time. While some shift was expected, the January 25 asteroid location is still well outside the expected value.
+
+With this external assessment of the points used, the proper motion was taken from the fit of the first four points, namely that $\mu_{\alpha} = 35.7\pm 0.2 ''/hr$ and $\mu_{\delta} = 6.3\pm 0.2 ''/hr$.
 
 \bibliographystyle{plainnat}
 \bibliography{cite}

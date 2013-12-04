@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  3 DEC 2013 21:17
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  3 DEC 2013 21:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -399,30 +399,30 @@ Package pdftex.def Info: separations.png used on input line 192.
 <fit_residuals.png, id=48, 1152.7065pt x 650.43pt>
 File: fit_residuals.png Graphic file (type png)
  <use fit_residuals.png>
-Package pdftex.def Info: fit_residuals.png used on input line 258.
+Package pdftex.def Info: fit_residuals.png used on input line 259.
 (pdftex.def)             Requested size: 403.45332pt x 227.6539pt.
 
 <urania_centroid_fix2.png, id=49, 1152.7065pt x 650.43pt>
 File: urania_centroid_fix2.png Graphic file (type png)
 
 <use urania_centroid_fix2.png>
-Package pdftex.def Info: urania_centroid_fix2.png used on input line 274.
+Package pdftex.def Info: urania_centroid_fix2.png used on input line 275.
 (pdftex.def)             Requested size: 452.9679pt x 255.59207pt.
  [8] [9 <./fit_residuals.png> <./urania_centroid_fix2.png>] <proper_motion.png,
  id=58, 1152.7065pt x 650.43pt>
 File: proper_motion.png Graphic file (type png)
 
 <use proper_motion.png>
-Package pdftex.def Info: proper_motion.png used on input line 295.
+Package pdftex.def Info: proper_motion.png used on input line 296.
 (pdftex.def)             Requested size: 403.45332pt x 227.6539pt.
  [10 <./proper_motion.png>]
 <path_urania.png, id=63, 1152.7065pt x 650.43pt>
 File: path_urania.png Graphic file (type png)
  <use path_urania.png>
-Package pdftex.def Info: path_urania.png used on input line 327.
+Package pdftex.def Info: path_urania.png used on input line 329.
 (pdftex.def)             Requested size: 452.9679pt x 255.59207pt.
  [11 <./path_urania.png>]
-Overfull \hbox (22.19905pt too wide) in paragraph at lines 341--354
+Overfull \hbox (22.19905pt too wide) in paragraph at lines 343--357
  [][] 
  []
 
@@ -449,7 +449,7 @@ ype1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2012/texmf-dist/fonts/type
 ublic/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/pu
 blic/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/publ
 ic/amsfonts/cm/cmtt12.pfb>
-Output written on "Final Report.pdf" (12 pages, 1660993 bytes).
+Output written on "Final Report.pdf" (12 pages, 1661002 bytes).
 PDF statistics:
  114 PDF objects out of 1000 (max. 8388607)
  68 compressed objects within 1 object stream

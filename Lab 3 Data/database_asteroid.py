@@ -239,8 +239,8 @@ plt.show()
 cs = ['b','g','c','m','y']
 plt.figure()
 for i in range(len(righta)):
-	plt.plot(righta[i],decl[i],'{0}.'.format(cs[i]),label = 'Jan {0}'.format(days[i]))
-plt.plot(actual_asteroidx,actual_asteroidy,'rd')
+	plt.errorbar(righta[i],decl[i],label = 'Jan {0}'.format(days[i]),yerr=0.8173101414/3600,xerr = 0.890389808/3600,fmt='{0}.'.format(cs[i]))
+plt.errorbar(actual_asteroidx,actual_asteroidy,fmt='rd',yerr=0.8173101414/3600,xerr = 0.890389808/3600)
 plt.plot(line(popt,smooth_timehr),line(kopt,smooth_timehr),'r',label='Fitted asteroid motion')
 #plt.plot(line(ropt,smooth_timehr),line(mopt,smooth_timehr),'g',label='Fitted asteroid motion')
 plt.xlim(min(righta[0]),max(righta[4]))
