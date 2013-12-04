@@ -329,7 +329,9 @@ The final result of all of the calculations is illustrated in Figure~\ref{fig:pa
 \label{fig:path}
 \end{figure}
 
-One feature that can be immediately noted about Figure~\ref{fig:path} is the constant offset of the background stars. The first four days of observations covered overlapping portions of the sky (this fact was used in locating the asteroid itself). Thus in the image, there are stars from different days that correspond to each other. This is easiest to see in the comparison of the January 22 and January 23 data.
+One feature that can be immediately noted about Figure~\ref{fig:path} is the constant offset of the background stars. The first four days of observations covered overlapping portions of the sky (this fact was used in locating the asteroid itself). Thus in the image, there are stars from different days that correspond to each other. This is easiest to see in the comparison of the January 22 and January 23 data, where the stars overlap. However, it is clear that there is a constant offset between the star patterns for the earlier two days. Unlike the plots where database stars were compared to centroids, the shift between the two sets is constant, but different for each pair.
+
+Since each day's pixel coordinates goes through the same transformation to equatorial coordinates (using the same plate constants), there are two possible reasons for this strange offset. The first is that the plate constants since the previous October for which they were calculated (Table~\ref{tab:datatable}). However, this would imply that the plate constants vary rather exteremely from day to day. The other possiblility is that the $\alpha_{0}$ and $\delta_{0}$ used in Equation~\ref{eqn:radec} were not the actual coordinates upon which the telescope was centered. The $\alpha_{0}$ and $\delta_{0}$ were taken from the fit file, and while those coordinates are where the telescope believed it was pointing, poor calibration or some other pointing error would mean that those coordinates were not correct.
 
 \begin{center}
 \begin{table}[!htbp]
@@ -347,7 +349,7 @@ One feature that can be immediately noted about Figure~\ref{fig:path} is the con
   	\hline
   	Jan 25 & 03:06:57.74 & 03:02:30.46 & 267 & +19:38:12.9 & +19:26:21.6 & 711\\
    \end{tabular}
-    \caption{A comparison of asteroid position as identified within the program and asteroid position according the JPL's ephemeris~\citep{urania}.}
+    \caption{A comparison of asteroid position as identified within the program and asteroid position according the JPL's ephemeris~\citep{urania}. Dates are all from 2012.}
     \label{tab:position}
 \end{table}
 \end{center}
