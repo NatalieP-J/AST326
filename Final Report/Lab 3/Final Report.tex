@@ -1,7 +1,7 @@
 \documentclass[a4paper,12pt]{article}
 
 \usepackage{rotating}
-\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage[top=1in, bottom=1in, left=0.75in, right=0.75in]{geometry}
 \usepackage{graphicx}
 \usepackage[numbers,square,sort&compress]{natbib}
 \usepackage{setspace}
@@ -25,7 +25,7 @@
 \begin{abstract}
 \label{abstract}
 
-The purpose of this lab was to analyze data taken nearly two years ago with the Dunlap Institute Telescope from Mt. Joy, New Mexico. The provided data included a four minute exposure on the NGC7331 galaxy and five shorter exposures tracking the asteroid 30 Urania over five days of observations. These two dimensional CCD images were reduced via dark subtraction and flat fielding. The galaxy image was used as a reference with which to calculate the camera's plate constants. The derived plate constants were used to transform the pixel locations of the asteroid back to equatorial coordinates. A linear fit was made to the points in right ascension and declination over time to calculate the proper motion of the asteroid.
+The purpose of this lab was to analyze data taken nearly two years ago with the Dunlap Institute Telescope from Mt. Joy, New Mexico. The provided data included a four minute exposure on the NGC7331 galaxy and five shorter exposures tracking the asteroid 30 Urania over five days of observations. These two dimensional CCD images were reduced via dark subtraction and flat fielding. The galaxy image was used as a reference with which to calculate the camera's plate constants, which were used to transform the pixel locations of the asteroid back to equatorial coordinates. A linear fit was made to the asteroid's location in right ascension and declination over time to calculate its proper motion.
 
 \end{abstract}
 
@@ -34,9 +34,9 @@ The purpose of this lab was to analyze data taken nearly two years ago with the 
 \section{Introduction}
 \label{sec:intro}
 
-Astrometry is an astronomical technique used to determine the motions of faraway objects. Within the solar system, these movements help increase understanding of orbits and gravitational interactions. At the galactic core, such measurements have implied the presence of a supermassive black hole. A much simpler exercise was undertaken here: measuring the position of an asteroid over a nine day period. After suitably characterizing the CCD camera used to make the measurements, it was possible to find the apparent physical displacement of the asteroid between each image. This displacement was used to calculate the proper motion of the asteroid: the component of its velocity projected onto the sphere of the sky visible from Earth.
+Astrometry is an astronomical technique used to determine the motions of faraway objects. Within the solar system, these movements help improve understanding of orbits and gravitational interactions. At the galactic core, such measurements have implied the presence of a supermassive black hole. Much simpler measurements were undertaken here: measuring the position of an asteroid over a nine day period. After suitably characterizing the CCD camera used to make the measurements, it was possible to find the apparent physical displacement of the asteroid between each image. This displacement was used to calculate the proper motion of the asteroid: the component of its velocity projected onto the sphere of the sky visible from Earth.
 
-It was the characterization of the CCD camera that proved to be the greatest challenge in this experiment. The transformation from standard coordinates to pixel location (or vice versa) required a set of plate constants, elements of matrix that described any rotation of the image. Given this information, it was simply a matter of implementing the software to compute the coordinates and fit the asteroid's motion.
+It was the characterization of the CCD camera that proved to be the greatest challenge in this experiment. The transformation from standard coordinates to pixel location (or vice versa) required a set of plate constants, elements of matrix that described any rotation of the image. Given these constants, it was simply a matter of creating the software to compute the coordinates and fit the asteroid's motion.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -45,7 +45,7 @@ It was the characterization of the CCD camera that proved to be the greatest cha
 
 Unlike previous experiments, all data was already provided for this lab. Thus it is difficult to draw up a clear division of work between group members. Collaborative work was done when considering the necessary calculations, but the data was analyzed independently.
 
-Table~\ref{tab:datatable} provides a list of the pertinent information found in the header of each of the .fts files provided. In particular, it is worth noting that the dark, flat and raw data for the galaxy observation were all taken at starkly different dates.
+Table~\ref{tab:datatable} provides a list of the pertinent information found in the header of each of the .fts files provided. In particular, it is worth noting that the dark, flat and raw data for the galaxy observation were all taken at different dates.
 
 \begin{table}[!htbp]
   \centering
@@ -77,11 +77,11 @@ Table~\ref{tab:datatable} provides a list of the pertinent information found in 
    29/01/12 & 00:56:08 & N/A & N/A & Flat & 6.03\\
    28/01/12 & 22:55:47 & N/A & N/A & Dark & 60\\
    \end{tabular}
-    \caption{Dates and times of sources recorded with the Dunlap Institute Telescope at Mt. Joy New Mexico. Following convention, $\alpha$ is right ascension in hours and $\delta$ is declination in degrees. Entries marked by N/A were not included in the header files.}
+    \caption{Dates and times of sources recorded with the Dunlap Institute Telescope at Mt. Joy New Mexico. Following convention, $\alpha$ is right ascension in hours and $\delta$ is declination in degrees. Information taken from the header of the provided .fts file for each observation. Entries marked by N/A were not included in the header.}
     \label{tab:datatable}
 \end{table}
 
-All of the data was taken with the Dunlap Institute Telescope at the Mt. Joy site in New Mexico. The specifications of the telescope were provided. The CCD used was comprised of 4096x4096 array, but all observations taken here have been binned into a 2048x2048 array, where each pixel has a side length 0.009mm. The telescope's focal length is 3454mm and its primary apeture diameter 50cm. This gives a lower limit on resolution of 0.4" for red wavelengths, but this limit is likely increased by atmospheric turbulence and other seeing factors, since we are considering a ground based telescope.
+All of the above data was taken with the Dunlap Institute Telescope at the Mt. Joy site in New Mexico. The specifications of the telescope were provided in the lab manual. The CCD used was comprised of a 4096x4096 array, but all observations taken here have been binned into a 2048x2048 array. This means each binned pixel has a side length 0.018mm twice the actual pixel side length. The telescope's focal length is given as 3454mm and its primary apeture diameter 50cm. This gives a lower limit on resolution of 0.4$''$ for red wavelengths, but this limit is likely increased by atmospheric turbulence and other seeing factors, since we are considering a ground based telescope.
 
 Preliminary examination of the data using the SAOImage DS9 software revealed a few interesting features. The expected hot pixels were clearly present, though they would later be eliminated with dark subtraction. 
 
@@ -92,23 +92,21 @@ Preliminary examination of the data using the SAOImage DS9 software revealed a f
   \label{fig:flatspec}
 \end{figure}
 
-Another curious artifact was most obvious in the flat images. Cursory inspection of Figure~\ref{fig:flatspec} reveals that the CCD is apparently not uniformly illuminated in its twilight sky gazing. However, since stars are very nearly point sources, spanning only a few pixels, it is only the nearby pixel to pixel variation that will be of concern, rather than the overall trends. The latter would be significant only if relative intensity of the stars was a factor in the observations.
+Another curious artifact was most obvious in the flat images, produced by pointing the telescope at a twilight sky. Cursory inspection of Figure~\ref{fig:flatspec} reveals that the CCD is apparently not uniformly illuminated in its twilight sky gazing. However, since stars are very nearly point sources, spanning only a few pixels, it is only the nearby pixel to pixel variation that will be of concern, rather than the overall trends. The latter would be significant only if relative intensity of the stars was a factor in the observations.
 
-More difficult to spot were the strange torus-like anomalies in the image: donut-shaped areas with slightly lower intensity than the surrounding region. Several examples have been circled in Figure~\ref{fig:flatspec}. They are faint, but noticably features. However, close examination of the raw images showed that such toruses were present there as well. Data reduction was done as explained in Section~\ref{sec:data} in the hope that the location of these toruses was constant (some feature of the telescope's mirror perhaps), and would be accounted for by flat fielding.
+More difficult to spot were the strange torus-like anomalies in the image: donut-shaped areas with slightly lower intensity than the surrounding region. Several examples have been circled in Figure~\ref{fig:flatspec}. They are faint, but noticably features. Close examination of the raw images showed that such toruses were present there as well. Data reduction was done (explained in Section~\ref{sec:data}) in the hope that the location of these toruses was constant (some feature of the telescope's mirror, perhaps), and would be accounted for by flat fielding.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Data Reduction and Methods}
 \label{sec:data}
 
-The first step towards analyzing the data was to reduce the noise and variations due to the camera itself. While the former, done by dark subtraction, is relatively trivial, the latter required some deliberation.
-
-The flat file provided for the galaxy image had already been reduced, but the others required some modification. Flat fielding is meant to eliminate the pixel to pixel variations on a small scale, an example of which is shown in Figure~\ref{fig:flatzoom}.
+The first step towards analyzing the data was to reduce the noise and variations due to the camera itself. While the former, done by dark subtraction, is relatively trivial, the latter required some deliberation. The flat file provided for the galaxy image had already been reduced, but the others required some modification. Flat fielding is meant to eliminate the pixel to pixel variations on a small scale, an example of which is shown in Figure~\ref{fig:flatzoom}.
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[width=\linewidth]{zoomflatspectrum.png}
-  \caption{A zoomed-in section of the original flat in Figure~\ref{fig:flatspec}, showing pixel to pixel variations even in what appeared to be relatively uniform section (pixels (630,1350) to (640,1360)). Colourbar scale has been modified.}
+  \caption{A zoomed-in section of the original flat in Figure~\ref{fig:flatspec}, showing pixel to pixel variations even in what appeared to be relatively uniform section (pixels (630,1350) to (640,1360)). Note that the colourbar scale has been modified from Figure~\ref{fig:flatspec}.}
   \label{fig:flatzoom}
 \end{figure}
 
@@ -126,7 +124,7 @@ P_{i} = \frac{R_{i} - D_{i}}{F_{pi}}
 \label{eqn:process}
 \end{equation}
 
-Once the image had been processed through Python implementation of Equations~\ref{eqn:flat} and~\ref{eqn:process}, an image not unlike Figure~\ref{fig:galaxy} was produced. The next step was to identify the stars in the image. This was done by finding local maxima, using Python to check each pixel's intensity against its surroundings and threshold intensity. At each of these local maxima, Equation~\ref{eqn:centroid} was used to find the star's centroid, where i represents the number of the pixel being summed and ($\langle x \rangle$,$\langle y \rangle$) are the centroid's coordinates. The radius over which the sum was taken was limited to 25 pixels, and only pixels with intensity greater than the background limit were allowed to contribute.
+Once the image had been processed through Python implementation of Equations~\ref{eqn:flat} and~\ref{eqn:process}, an image not unlike Figure~\ref{fig:galaxy} was produced. The next step was to identify the stars in the image. This was done by first finding local maxima, using Python to check each pixel's intensity against its surroundings and threshold intensity. At each of these local maxima, Equation~\ref{eqn:centroid} was used to find the star's centroid, where i represents the number of the pixel being summed and ($\langle x \rangle$,$\langle y \rangle$) are the centroid's coordinates. The radius over which the sum was taken was limited to 25 pixels, and only pixels with intensity greater than the background limit were allowed to contribute.
 
 \begin{equation}
 \begin{array}{ccl}
@@ -139,20 +137,18 @@ Once the image had been processed through Python implementation of Equations~\re
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width = \linewidth]{NGC7331.png}
-\caption{Dark subtracted and flat field corrected galaxy image used to determine the plate constants. Intensity scale is logarithmic to make stars more immediately obvious. The red circles identify centroids found by the program.}
+\caption{Dark subtracted and flat field corrected galaxy image used to determine the plate constants. Intensity scale is logarithmic to make stars more immediately obvious. The red circles identify centroids found by the program. NGC7331 is clear as an extended object, unmarked by a centroid.}
 \label{fig:galaxy}
 \end{figure}
 
-With the centroids identified, the next step was to match up stars from the United States Naval Observatory (USNO) B1.0 Catalogue. Python code was provided to query the database, so all that remained was to set the field of view and transform the results into pixel locations.
-
-Field of view was calculated as follows, using the provided telescope specifications from Section~\ref{sec:obs}.
+With the centroids identified, the next step was to match them with stars from the United States Naval Observatory (USNO) B1.0 Catalogue. Python code was provided to query the database, so all that remained was to set the field of view and transform the results into pixel locations. Field of view was calculated as follows, using the provided telescope specifications from Section~\ref{sec:obs}.
 \begin{center}
 field of view = $fov = \frac{pixels}{(f/p)}$\\
 $pixels = 2048$, $f = 3454$mm, $p = 0.018$mm\\
 $\implies$ $fov = 0.011$ radians = $36.7'$
 \end{center}
 
-The resulting stars from the database were limited to magnitudes less than 13 and converted to standard coordinates ($X,Y$) with Equation~\ref{eqn:standard} implemented in Python. Following convention, $\alpha$ is right ascension, $\delta$ is declination and ($\alpha_{0},\delta_{0}$) are the equatorial coordinates of the center of the image. These coordinates were taken to be the right ascension and declination pointing of the telescope from the header file.
+The stars within this field of view from the database were limited to magnitudes less than 13 and converted to standard coordinates ($X,Y$) with Equation~\ref{eqn:standard} implemented through Python. Following convention, $\alpha$ is right ascension, $\delta$ is declination and ($\alpha_{0},\delta_{0}$) are the equatorial coordinates of the center of the image. These coordinates were taken to be the right ascension and declination pointing of the telescope from the header of the .fts file.
 
 \begin{equation}
 \begin{array}{ccl}
@@ -177,7 +173,7 @@ y &=& \frac{f}{p}Y+y_{0}
 \section{Calculations and Modelling}
 \label{sec:calc}
 
-Once the steps outlined in Section~\ref{sec:data} were carried out, it was possible to begin matching up stars from the catalogue and identified centroid locations. Even without camera corrections, there was a clear correlation between catalogue stars and the centroids (Figure~\ref{fig:catalogue}). A Python program was used to find the separation each centroid and each of the catalogue. The catalogue star that corresponded to the minimum separation was selected as matching the centroid. Some of the centroids remained unmatched, because the check for nearby catalogue stars was limited to a radius of 15 pixels.
+Once the steps outlined in Section~\ref{sec:data} were carried out, it was possible to begin matching up stars from the catalogue and identified centroid locations. Even without camera corrections, there was a clear correlation between catalogue stars and the centroids (Figure~\ref{fig:catalogue}). A Python program was used to find the separation between each centroid and each star from the catalogue. The catalogue star that corresponded to the minimum separation was selected as matching the centroid. Some of the centroids remained unmatched, because the check for nearby catalogue stars was limited to a radius of 15 pixels.
 
 \begin{figure}[!htbp]
 \centering
@@ -205,7 +201,7 @@ y &=& \frac{f}{p}(Xsin\theta + Ycos\theta)+y_{0}
 \label{eqn:rotate}
 \end{equation}
 
-It was simply a matter of calculating the angle $\theta$ of rotation, since $x,y$ were the pixel coordinates, $X,Y$ were the standard coordinates of catalogue and $x_{0},y_{0}$ the coordinates of the centre pixel. To this end, a matrix equation was set up for each matched pair of centroid ($\vec{x} = (x,y,1)$) and catalogue star ($\vec{X} = (X,Y,1)$), resulting in Equation~\ref{eqn:transform}.
+Now it was simply a matter of calculating the angle $\theta$ of rotation, since $x,y$ were the pixel coordinates, $X,Y$ were the standard coordinates of catalogue and $x_{0},y_{0}$ the coordinates of the centre pixel. To this end, a matrix equation was set up for each matched pair of centroid ($\vec{x} = (x,y,1)$) and catalogue star ($\vec{X} = (X,Y,1)$), resulting in Equation~\ref{eqn:transform}.
 
 \begin{eqnarray}
 \mathbf{T} &=& \begin{pmatrix}
@@ -232,28 +228,29 @@ $\mathbf{a}_{i} = x_{i}$, $\mathbf{B}_{i}$ = ($(f/p)X_{i}$  $(f/p)Y_{i}$   $1$) 
 
 \end{center}
 
-Using Equation~\ref{eqn:constants}, it was possible to determine the transformation constants for $x$. Similar steps were carried out for the $y$ coordinate, with the results shown in Table~\ref{tab:constants}.
+Using Equation~\ref{eqn:constants}, it was possible to determine the transformation constants for $x$. Similar steps were carried out for the $y$ coordinate, with the results shown in Table~\ref{tab:constants}. All constants are fairly close to the ideal value. As expected, $y_{0}$ is greater than the theoretical value, since Figure~\ref{fig:separation} shows the offset in y as being mostly positive. For similar reasons, $x_{0}$ is expected to be less than the theoretical value.
 
 \begin{center}
 \begin{table}[!htbp]
   \centering
-  \begin{tabular}{c||c||c}
-  	Constant & Ideal Value & Calculated Value \\
+  \begin{tabular}{c||c||c||c}
+  	Related Coordinate & Constant & Ideal Value & Calculated Value \\
   	\hline
   	\hline
-  	$a_{11}$ & 1 & 1.00050002 \\
-  	$a_{12}$ & 0 & -0.00659824 \\
-  	$x_{0}$ & 1024 & 1019.64337372 \\
-  	$a_{21}$ & 0 & 0.00626632 \\
-  	$a_{22}$ & 1 & 0.99983162 \\
-  	$y_{0}$ & 1024 & 1028.3480059 \\
+  	$x$ & $a_{11}$ & 1 & 1.00050002 \\
+  	& $a_{12}$ & 0 & -0.00659824 \\
+  	& $x_{0}$ & 1024 & 1019.64337372 \\
+    \hline
+  	$y$ & $a_{21}$ & 0 & 0.00626632 \\
+  	& $a_{22}$ & 1 & 0.99983162 \\
+  	& $y_{0}$ & 1024 & 1028.3480059 \\
    \end{tabular}
     \caption{A comparison of constant values for an ideal camera (Equation~\ref{eqn:ideal}) and those fitted to the centroids.}
     \label{tab:constants}
 \end{table}
 \end{center}
 
-Applying the constants to the transformation of the catalogue stars to pixel coordinates resulted in a much closer match (Figure~\ref{fig:residuals}). The residuals were averaged and the result of each average was taken to be the uncertainty in the pixel locations. This was a sensible measure of error because it quantifies the difference between the transformed location and the observed position. This resulted in $\Delta x$ = 0.755 pixels, $\Delta y$ = 0.756 pixels.
+Applying these constants to the transformation of the catalogue stars from equatorial to pixel coordinates resulted in a much closer match (Figure~\ref{fig:residuals}). The residuals were averaged and the result of each average was taken to be the uncertainty in the pixel locations. This was a sensible measure of error because it quantified the difference between the transformed location and the observed position. This resulted in $\Delta x$ = 0.755 pixels, $\Delta y$ = 0.756 pixels.
 
 \begin{figure}[!htbp]
 \centering
@@ -263,11 +260,11 @@ Applying the constants to the transformation of the catalogue stars to pixel coo
 \end{figure}
 
 \begin{equation}
-\chi ^{2}_{reduced} = (\mathbf{a}-\mathbf{B}\mathbf{c})^{T}(\mathbf{a}-\mathbf{B}\mathbf{c})
+\chi ^{2} = (\mathbf{a}-\mathbf{B}\mathbf{c})^{T}(\mathbf{a}-\mathbf{B}\mathbf{c})
 \label{eqn:chi}
 \end{equation}
 
-In spite of few outliers, the residuals of this fit were centered around zero in both $x$ and $y$ (Figure~\ref{fig:residuals}). The goodness of the fit could be quantified using Equation~\ref{eqn:chi} for $\chi^{2}_{reduced}$. It was found that $\chi^{2}_{reducedx}$ = 1.43784932, while $\chi^{2}_{reducedy}$ = 1.98449692.
+In spite of few outliers, the residuals of this fit were centered around zero in both $x$ and $y$ (Figure~\ref{fig:residuals}). The goodness of the fit could be quantified using Equation~\ref{eqn:chi} for $\chi^{2}$ and dividing the result by the number of degrees of freedom. It was found that $\chi^{2}_{reducedx}$ = 1.43784932, while $\chi^{2}_{reducedy}$ = 1.98449692, both close to the ideal fit value of $\chi^{2}_{reduced}$ = 1.
 
 Given these new transformation constants, and assuming that they would not change in the three month period separating the galaxy observations and those of the asteroid, analysis of the images of 30 Urania began. The raw images were reduced and centroids were located as outlined in Section~\ref{sec:data}. The resulting images are shown in Figure~\ref{fig:urania}
 
@@ -278,9 +275,9 @@ Given these new transformation constants, and assuming that they would not chang
 \label{fig:urania}
 \end{figure}
 
-The asteroid was identified in the reduced flats using SAOImage DS9. Since the telescope would have been focussed with the asteroid somewhere near the centre of the image, it was simply a matter of identifying patterns of stars common to subsequent images and finding the point that did not match. Being relatively nearby, the asteroid was quite bright, and once a pattern was identified, its presence was obvious. This strategy worked well for the first four days of observations, but broke down on the final one, because there was no overlap of stars to be used for comparison. In this final image, the asteroid was identified by educated guess.
+The asteroid was identified in the reduced images using SAOImage DS9. Since the telescope would have been focussed with the asteroid somewhere near the centre of the image, it was simply a matter of identifying patterns of stars common to subsequent images and finding the object that did not match. Being relatively nearby, the asteroid was quite bright, and once a background pattern was identified, its presence was obvious. This strategy worked well for the first four days of observations, but broke down on the final one, because there was no overlap of stars to be used for comparison. In this final image, the asteroid was identified by educated guess. In each case, the resulting pixel locations were recorded.
 
-Once the asteroid's approximate position had been determined, its actual location was found by finding the closest centroid identified in the image using a variation of the Python code used to match up catalogue stars and centroids. Once these points were found, they were transformed to equatorial coordinates. First, the inverse of Equation~\ref{eqn:transform} was applied, using the derived plate constants. This transformed the pixel locations to standard coordinates. These standard coordinates were then transformed to right ascension and declination using Equation~\ref{eqn:radec}.
+Once the asteroid's approximate position had been determined, its actual location was decided by finding the closest centroid identified in the image with a variation of the Python code used to match up catalogue stars and centroids. Once these points were found for each day, they were transformed to equatorial coordinates. First, the inverse of Equation~\ref{eqn:transform} was applied, using the derived plate constants. This transformed the pixel locations to standard coordinates. These standard coordinates were then transformed to right ascension and declination using Equation~\ref{eqn:radec}.
 
 \begin{equation}
 \begin{array}{ccl}
@@ -295,7 +292,7 @@ Once the coordinates had been transformed to the equatorial system, the points w
 \begin{figure}[!htbp]
 \centering
 \includegraphics[scale = 0.35]{proper_motion.png}
-\caption{Motion in right ascension and declination of 30 Urania over observing time. Error bars are plotted, but are hidden by the markers.}
+\caption{Motion in right ascension and declination of 30 Urania over observing time. Error bars are plotted, but are hidden by the markers. Time = 0 marks the beginning of observations on January 20 2012}
 \label{fig:pm}
 \end{figure}
 
@@ -323,7 +320,7 @@ Two fits were made, one to the first four points, and another including the last
 \section{Discussion}
 \label{sec:discussion}
 
-The final result of all of the calculations is illustrated in Figure~\ref{fig:path}. The figure shows a tangent plane approximation of the sky (the sphere plotted in two dimensions). The asteroid position has been marked, and a line showing its proper motion across the sky drawn through the star field of centroids.
+The final result of all of the calculations is illustrated in Figure~\ref{fig:path}. The figure shows a tangent plane approximation of the sky (the sphere plotted in two dimensions). The asteroid position has been marked, and a line showing its proper motion across the sky has been drawn through the star field of centroids.
 
 \begin{figure}[!htbp]
 \centering
@@ -332,11 +329,11 @@ The final result of all of the calculations is illustrated in Figure~\ref{fig:pa
 \label{fig:path}
 \end{figure}
 
-One feature that can be immediately noted about Figure~\ref{fig:path} is the constant offset of the background stars. The first four days of observations covered overlapping portions of the sky (this fact was used in locating the asteroid itself). Thus in the image, there are stars from different days that correspond to each other. This is easiest to see in the comparison of the January 22 and January 23 data, where the stars overlap. However, it is clear that there is a constant offset between the star patterns for the earlier two days. Unlike the plots where database stars were compared to centroids, the shift between the two sets is constant, but different for each pair.
+One feature that can be immediately noted about Figure~\ref{fig:path} is the constant offset of the background stars. The first four days of observations covered overlapping portions of the sky (this fact was used in locating the asteroid itself). Thus in the image, there are centroids from different days that correspond to each other. This is easiest to see in the comparison of the January 22 and January 23 data, where the stars overlap. However, it is clear that there is a constant offset between the star patterns for the earlier two days as well. Unlike the plots where database stars were compared to centroids, the shift between any pair of two days is constant, but is different for each pair.
 
-Since each day's pixel coordinates goes through the same transformation to equatorial coordinates (using the same plate constants), there are two possible reasons for this strange offset. The first is that the plate constants since the previous October for which they were calculated (Table~\ref{tab:datatable}). However, this would imply that the plate constants vary rather exteremely from day to day. The other possiblility is that the $\alpha_{0}$ and $\delta_{0}$ used in Equation~\ref{eqn:radec} were not the actual coordinates upon which the telescope was centered. The $\alpha_{0}$ and $\delta_{0}$ were taken from the fit file, and while those coordinates are where the telescope believed it was pointing, poor calibration or some other pointing error would mean that those coordinates were not correct.
+Since each day's pixel coordinates goes through the same transformation to equatorial coordinates (using the same plate constants), there are two possible reasons for this strange offset. The first is that the plate constants changed since the previous October for which time they were calculated originally calculated (Table~\ref{tab:datatable}). However, this would imply that the plate constants vary rather exteremely from day to day. The other possiblility is that the $\alpha_{0}$ and $\delta_{0}$ used in Equation~\ref{eqn:radec} were not the actual coordinates upon which the telescope was centered. The $\alpha_{0}$ and $\delta_{0}$ were taken from the the header of the .fts file, and while those coordinates are where the telescope believed it was pointing, poor calibration or some other pointing error would mean that those coordinates were not correct.
 
-As a further check of the asteroid coordinates, NASA's Jet Propulsion Laboratory HORIZON's database~\citep{urania} was queried to get an ephemeris for 30 Urania over the relevant dates. Table~\ref{tab:position} shows the results of that ephemeris for the times specified in the fits files compared with the asteroid's position in the data.
+As a further check of the asteroid coordinates, NASA's Jet Propulsion Laboratory HORIZON's database~\citep{urania} was queried to get an ephemeris for 30 Urania over the relevant dates. Table~\ref{tab:position} shows the results of that ephemeris for the times specified in the .fts files compared with the asteroid's position in the data.
 
 \begin{center}
 \begin{table}[!htbp]
@@ -360,15 +357,17 @@ As a further check of the asteroid coordinates, NASA's Jet Propulsion Laboratory
 \end{table}
 \end{center}
 
-It is obvious from the Table~\ref{tab:position} that for the first four days, the asteroid's position matches the predicted position quite well. However, on the last day, it is clear that the asteroid was completely misidentified. Therefore, final values for proper motion are taken from the fit of the first four points. Both fits were plotted on Figure~\ref{fig:path}, but the scaling is such that they are completely indistinguishable.
+It is obvious from the Table~\ref{tab:position} that for the first four days, the asteroid's position matches the predicted position quite well. However, on the last day, it is clear that the asteroid was completely misidentified. Therefore, final values for proper motion are taken from the fit of the first four points. Both fits were plotted on Figure~\ref{fig:path}, but the scaling was such that they were completely indistinguishable.
 
-The offsets in Table~\ref{tab:position} are outside the errors calculated in Section~\ref{sec:calc}, where it was found that $\Delta\alpha = 0.890''$ and $\Delta\delta = 0.817''$. This is not entirely unexpected. The ephemeris could only be generated for thirty minute intervals (as any longer time crashed the webpage), and so the observation times had to be rounded to the nearest half hour. For a slow moving star, this would not be a problem, but in the case of 30 Urania, Table~\ref{tab:pm} clearly shows that a large shift in arcseconds should be expected even over a short time. While some shift was expected, the January 25 asteroid location is still well outside the expected value.
+The offsets in Table~\ref{tab:position} are outside the errors calculated in Section~\ref{sec:calc}, where it was found that $\Delta\alpha = 0.890''$ and $\Delta\delta = 0.817''$. This is not entirely unexpected. The ephemeris could only be generated for thirty minute intervals (as any shorter interval crashed the webpage), and so the observation times had to be rounded to the nearest half hour. For a slow moving star, this would not be a problem, but in the case of 30 Urania, Table~\ref{tab:pm} clearly shows that a large shift in arcseconds should be expected even over a short time. While some shift was expected, the January 25 asteroid location is still well outside the expected value.
 
 With this external assessment of the points used, the proper motion was taken from the fit of the first four points, namely that $\mu_{\alpha} = 35.7\pm 0.2 ''/hr$ and $\mu_{\delta} = 6.3\pm 0.2 ''/hr$.
 
-There are a number of ways certainty of this value could be improved. Most of these improvements would come from a better assessment of plate constants. Figure~\ref{fig:residuals} clearly shows that there were quite a few outliers in the plate constants fit. In the original overplotted image (Figure~\ref{fig:galaxy}), there were centroids and database stars that didn't find a match. This is most likely due to the lower intensity limit placed on both data sets. For the catalogue, the intensity was limited by the magnitude, but the centroids were limited by the number of counts. A better matching program would take the normalized centroid intensity and the magnitude of the catalogue star and make sure the relative intensity matched, as well as the position. For the purposes of the fit done from Figure~\ref{fig:galaxy}, the magnitude of the catalogue stars needed to be limited, simply to avoid false matches. The catalogue includes stars all the way down to magnitude 21, and would definitely result in some unintended connections to the centroids.
+There are a number of ways certainty of this value could be improved. Most of these improvements would come from a better assessment of plate constants. Figure~\ref{fig:residuals} shows that there were a few outliers in the plate constants fit. In the original overplotted image (Figure~\ref{fig:galaxy}), there were centroids and database stars that didn't find a match. This is most likely due to the lower intensity limit placed on both data sets. For the catalogue, the intensity was limited by the magnitude, but the centroids were limited by the number of counts. A better matching program would take the normalized centroid intensity and the magnitude of the catalogue star and make sure the relative intensity matched, as well as the position. For the purposes of the fit done from Figure~\ref{fig:galaxy}, the magnitude of the catalogue stars needed to be limited, simply to avoid false matches. The catalogue includes stars all the way down to magnitude 21, and would definitely result in some unintended connections to the centroids. An intensity check would doubtless improve the fit.
 
-Another way the plate constants would be improved would be by improving the centroid finder. The centroids were identified by using a set radius and pixels and assuming everything within in it belonged to one star. This solved the problem of multiple local maxima located at one star. However, this method fails when two stars appear within the selected radius. As it stands, the centroiding program would simply identfy them as single star. This did not seem to pose any major problems for the current investigation, but would been an issue if the asteroid had been too close to a background star in one of the images. If the centroid finder had used two dimensional Gaussian fitting rather than Equation~\ref{eqn:centroid}, the instances of this particular error would likely have been reduced. Another improvement of the current method would be to take the intensity of a sky annulus around each identified star, rather than using a set background intensity for the entire image. Unfortunately, time constraints prohibited the implementation of these methods.
+Another way the fit might be improved would be by improving the centroid finder. The centroids were identified by using a set radius of pixels and assuming everything within in it belonged to one star. This solved the problem of multiple local maxima identifying a single star, but this method fails when two stars appear within the chosen radius. As it stands, the centroiding program would simply identfy them as single star. This did not seem to pose any major problems for the current investigation, but would been an issue if the asteroid had been too close to a background star in one of the images. If the centroid finder had used two dimensional Gaussian fitting rather than Equation~\ref{eqn:centroid}, the instances of this particular error would likely have been reduced. Another improvement of the current method would be to take the intensity of a sky annulus around each identified star, rather than using a set background intensity limit for the entire image. Unfortunately, time constraints prohibited the implementation of these methods.
+
+Although a solution for the proper motion of the asteroid was found, it could be improved with more time to try a few of the methods listed above. Certainly the challenges of accurate of astrometry have been clearly outlined in the pursuit of the asteroid across the night sky.
 
 \bibliographystyle{plainnat}
 \bibliography{cite}
