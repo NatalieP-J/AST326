@@ -1,0 +1,58 @@
+\begin{thebibliography}{8}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Buil(2013)]{neline}
+Christian Buil.
+\newblock {Spectral Calibration}.
+\newblock \url{http://www.astrosurf.com/buil/us/spe2/hresol4.htm}, 2013.
+\newblock [Accessed October 3 2013, October 29 2013].
+
+\bibitem[Chromey(2010)]{telescopes}
+Frederick~R. Chromey.
+\newblock \emph{{To Measure the Sky}}.
+\newblock Cambridge University Press, 2010.
+
+\bibitem[Howell(2006)]{ccd}
+Steve~B. Howell.
+\newblock \emph{{Handbook of CCD Astronomy}}, volume~5 of \emph{Cambridge
+  Observing Handbooks for Research Astronomers}.
+\newblock Cambridge University Press, second edition, 2006.
+
+\bibitem[Kaler(2013{\natexlab{a}})]{albireo}
+Jim Kaler.
+\newblock {Albireo}.
+\newblock \url{http://stars.astro.illinois.edu/sow/albireo.html},
+  2013{\natexlab{a}}.
+\newblock [Accessed October 31 2013].
+
+\bibitem[Kaler(2013{\natexlab{b}})]{enif}
+Jim Kaler.
+\newblock {Enif}.
+\newblock \url{http://stars.astro.illinois.edu/sow/enif.html},
+  2013{\natexlab{b}}.
+\newblock [Accessed October 31 2013].
+
+\bibitem[Kaler(2013{\natexlab{c}})]{vega}
+Jim Kaler.
+\newblock {Vega}.
+\newblock \url{http://stars.astro.illinois.edu/sow/vega.html},
+  2013{\natexlab{c}}.
+\newblock [Accessed October 31 2013].
+
+\bibitem[Lacarra and Majcher(2013)]{hgline}
+Maite Lacarra and Ariel Majcher.
+\newblock {Spectra Around Us}.
+\newblock \url{http://www.euhou.net}, 2013.
+\newblock [Accessed October 3 2013].
+
+\bibitem[Nave(2013)]{hlines}
+C.R. Nave.
+\newblock {Hydrogen Spectrum}.
+\newblock \url{http://hyperphysics.phy-astr.gsu.edu}, 2013.
+\newblock [Accessed October 29 2013].
+
+\end{thebibliography}

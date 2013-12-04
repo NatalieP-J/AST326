@@ -1,0 +1,13 @@
+sources
+
+Hg lines
+http://www.euhou.net/index.php/exercises-mainmenu-13/classroom-experiments-and-activities-mainmenu-186/179-observations-of-various-spectra-with-a-home-made-spectroscope
+
+Ne lines
+http://www.astrosurf.com/buil/us/spe2/hresol4.htm
+
+H lines
+http://hyperphysics.phy-astr.gsu.edu/hbase/tables/hydspec.html
+
+Balmer Jump
+http://ned.ipac.caltech.edu/level5/Glossary/Glossary_B.html
