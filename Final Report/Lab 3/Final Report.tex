@@ -333,7 +333,7 @@ One feature that can be immediately noted about Figure~\ref{fig:path} is the con
 
 Since each day's pixel coordinates goes through the same transformation to equatorial coordinates (using the same plate constants), there are two possible reasons for this strange offset. The first is that the plate constants since the previous October for which they were calculated (Table~\ref{tab:datatable}). However, this would imply that the plate constants vary rather exteremely from day to day. The other possiblility is that the $\alpha_{0}$ and $\delta_{0}$ used in Equation~\ref{eqn:radec} were not the actual coordinates upon which the telescope was centered. The $\alpha_{0}$ and $\delta_{0}$ were taken from the fit file, and while those coordinates are where the telescope believed it was pointing, poor calibration or some other pointing error would mean that those coordinates were not correct.
 
-As a further check of the asteroid coordinates, NASA's Jet Propulsion Laboratory HORIZON's database was queried to get an ephemeris for 30 Urania over the relevant dates. Table~\ref{tab:position} shows the results of that ephemeris for the times specified in the fits files compared with the asteroid's position in the data.
+As a further check of the asteroid coordinates, NASA's Jet Propulsion Laboratory HORIZON's database~\citep{urania} was queried to get an ephemeris for 30 Urania over the relevant dates. Table~\ref{tab:position} shows the results of that ephemeris for the times specified in the fits files compared with the asteroid's position in the data.
 
 \begin{center}
 \begin{table}[!htbp]
@@ -355,6 +355,10 @@ As a further check of the asteroid coordinates, NASA's Jet Propulsion Laboratory
     \label{tab:position}
 \end{table}
 \end{center}
+
+It is obvious from the Table~\ref{tab:position} that for the first four days, the asteroid's position matches the predicted position quite well. However, on the last day, it is clear that the asteroid was completely misidentified. Therefore, final values for proper motion are taken from the fit of the first four points. Both fits were plotted on Figure~\ref{fig:path}, but the scaling is such that they are completely indistinguishable.
+
+The offsets in Table~\ref{tab:position} are outside the errors found in Section~\ref{sec:calc}, where it was found that $\Delta\alpha = 0.890''$ and $\Delta\delta = 0.817''$. This is not entirely unexpected. The ephemeris could only be generated for thirty minute intervals (as any longer time crashed the webpage), and so the observation times had to be rounded to the nearest half hour. For a slow moving star, this would not be a problem, but in the case of 30 Urania, Table~ref{tab:pm} clearly shows that a large shift in arcseconds should be expected even over a short time.
 
 \bibliographystyle{plainnat}
 \bibliography{cite}
