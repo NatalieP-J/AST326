@@ -297,7 +297,7 @@ Once the coordinates had been transformed to the equatorial system, the points w
 \label{fig:pm}
 \end{figure}
 
-Two fits were made, one to the first four points, and another including the last point (about which there was less certainty). The resulting proper motions are listed in Table~\ref{tab:pm}.
+Two fits were made, one to the first four points, and another including the last point (about which there was less certainty). The resulting proper motions are listed in Table~\ref{tab:pm}. The uncertainty was found by averaging the residuals between the fitted proper motion and the individual proper motion calculated between consecutive points.
 
 \begin{center}
 \begin{table}[!htbp]
@@ -333,6 +333,8 @@ One feature that can be immediately noted about Figure~\ref{fig:path} is the con
 
 Since each day's pixel coordinates goes through the same transformation to equatorial coordinates (using the same plate constants), there are two possible reasons for this strange offset. The first is that the plate constants since the previous October for which they were calculated (Table~\ref{tab:datatable}). However, this would imply that the plate constants vary rather exteremely from day to day. The other possiblility is that the $\alpha_{0}$ and $\delta_{0}$ used in Equation~\ref{eqn:radec} were not the actual coordinates upon which the telescope was centered. The $\alpha_{0}$ and $\delta_{0}$ were taken from the fit file, and while those coordinates are where the telescope believed it was pointing, poor calibration or some other pointing error would mean that those coordinates were not correct.
 
+As a further check of the asteroid coordinates, NASA's Jet Propulsion Laboratory HORIZON's database was queried to get an ephemeris for 30 Urania over the relevant dates. Table~\ref{tab:position} shows the results of that ephemeris for the times specified in the fits files compared with the asteroid's position in the data.
+
 \begin{center}
 \begin{table}[!htbp]
   \centering
@@ -349,7 +351,7 @@ Since each day's pixel coordinates goes through the same transformation to equat
   	\hline
   	Jan 25 & 03:06:57.74 & 03:02:30.46 & 267 & +19:38:12.9 & +19:26:21.6 & 711\\
    \end{tabular}
-    \caption{A comparison of asteroid position as identified within the program and asteroid position according the JPL's ephemeris~\citep{urania}. Dates are all from 2012.}
+    \caption{A comparison of asteroid position as identified within the program and asteroid position according the JPL's ephemeris~\citep{urania}. Dates are all from 2012. By convention, right ascension ($\alpha$) is given in hours, and declination ($\delta$) is given in degrees.}
     \label{tab:position}
 \end{table}
 \end{center}
