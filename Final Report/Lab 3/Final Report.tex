@@ -49,7 +49,7 @@ Table~\ref{tab:datatable} provides a list of the pertinent information found in 
 
 \begin{table}[!htbp]
   \centering
-  \begin{tabular}{l||l||l||l||l||l}
+  \begin{tabular}{c||c||c||c||c||c}
    Date (UTC) & Time (UTC) & $\alpha$ (hr) & $\delta$ ($^o$) & Source & Exposure (s)\\
    \hline
    13/10/11 & 03:18:59 & 22:37:18 & +34:26:37 & NGC7331 & 240\\
@@ -236,7 +236,7 @@ Using Equation~\ref{eqn:constants}, it was possible to determine the transformat
 \begin{center}
 \begin{table}[!htbp]
   \centering
-  \begin{tabular}{l||l||l}
+  \begin{tabular}{c||c||c}
   	Constant & Ideal Value & Calculated Value \\
   	\hline
   	$a_{11}$ & 1 & 1.00050002 \\
@@ -251,7 +251,7 @@ Using Equation~\ref{eqn:constants}, it was possible to determine the transformat
 \end{table}
 \end{center}
 
-Applying the constants to the transformation of the catalogue stars to pixel coordinates resulted in a much closer match (Figure~\ref{fig:residuals}). The residuals were averaged and 
+Applying the constants to the transformation of the catalogue stars to pixel coordinates resulted in a much closer match (Figure~\ref{fig:residuals}). The residuals were averaged and the result of each average was taken to be the uncertainty in the pixel locations. This was a sensible measure of error because it quantifies the difference between the transformed location and the observed position. This resulted in $\Delta x$ = 0.755 pixels, $\Delta y$ = 0.756 pixels.
 
 \begin{figure}[!htbp]
 \centering
@@ -288,7 +288,7 @@ Once the asteroid's approximate position had been determined, its actual locatio
 \label{eqn:radec}
 \end{equation}
 
-Once the coordinates had been transformed to the equatorial system, the points were plotted against time and a line of best fit was found using the the scipy.optimize.leastsq module (Figure~\ref{fig:pm}).
+Once the coordinates had been transformed to the equatorial system, the points were plotted against time and a line of best fit was found using the the scipy.optimize.leastsq module (Figure~\ref{fig:pm}). The errors in x and y were also transformed, to give position uncertainty of $\Delta\alpha = 0.890''$, $\Delta\delta = 0.817''$.
 
 \begin{figure}[!htbp]
 \centering
@@ -302,13 +302,13 @@ Two fits were made, one to the first four points, and another including the last
 \begin{center}
 \begin{table}[!htbp]
   \centering
-  \begin{tabular}{l||l||l||l||l}
+  \begin{tabular}{c||c||c||c||c}
   	Points & $\mu_{\alpha} (^o/hr)$ & $\mu_{\alpha} (''/hr)$ & $\mu_{\delta} (^o/hr)$ & $\mu_{\delta} (''/hr)$ \\
   	\hline
   	4 & $9.93\e{-3}\pm 4\e{-5}$ & $35.7\pm 0.2$ & $1.74\e{-3}\pm 6\e{-5}$& $6.3\pm 0.2$ \\
   	5 & $1.08\e{-2}\pm 8\e{-4}$ & $39\pm 2$ & $1.9\e{-3}\pm 2\e{-4}$ & $6.8\pm 0.8$ \\
    \end{tabular}
-    \caption{Comparison of proper motion when making a linear fit of the position of the asteroid. The first row considers only the first four points, about which there is more certainty. The second row includes the final point as well.}
+    \caption{Comparison of proper motion when making a linear fit of the position of the asteroid. The first row considers only the first four points (green fit line in Figure~\ref{fig:pm}), about which there is more certainty. The second row includes the final point as well (pink fit line in Figure~\ref{fig:pm}).}
     \label{tab:pm}
 \end{table}
 \end{center}
@@ -320,6 +320,8 @@ Two fits were made, one to the first four points, and another including the last
 \section{Discussion}
 \label{sec:discussion}
 
+The final result of all of the calculations is illustrated in Figure~\ref{fig:path}. The figure shows a tangent plane approximation of the sky (the sphere plotted in two dimensions). The asteroid position has been marked, and a line showing its proper motion across the sky drawn through the star field of centroids.
+
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width = \linewidth]{path_urania.png}
@@ -327,5 +329,30 @@ Two fits were made, one to the first four points, and another including the last
 \label{fig:path}
 \end{figure}
 
+One feature that can be immediately noted about Figure~\ref{fig:path} is the constant offset of the background stars. The first four days of observations covered overlapping portions of the sky (this fact was used in locating the asteroid itself). Thus in the image, there are stars from different days that correspond to each other. This is easiest to see in the comparison of the January 22 and January 23 data.
+
+\begin{center}
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{c||c||c||c||c||c||c}
+  	Day & Identified $\alpha$ & Ephemeris $\alpha$ & Offset (s) & Identified $\delta$ & Ephemeris $\delta$ & Offset ($''$)\\
+  	\hline
+  	Jan 20 & 02:57:49.44 & 02:57:49.26 & 0.18 & +19:14:02.7 & +19:14:30.8 & 28.1\\
+  	\hline
+  	Jan 21 & 02:58:44.30 & 02:58:44.11 & 0.19 & +19:16:34.8 & +19:16:45.1 & -10.3\\
+  	\hline
+  	Jan 23 & 03:00:40.71 & 03:00:40.75 & 0.04 & +19:21:57.4 & +19:21:38.2 & 19.2\\
+  	\hline
+  	Jan 24 & 03:01:38.39 & 03:01:37.59 & 0.80 & +19:23:56.0 & +19:24:04.0 & -8.0\\
+  	\hline
+  	Jan 25 & 03:06:57.74 & 03:02:30.46 & 267 & +19:38:12.9 & +19:26:21.6 & 711\\
+   \end{tabular}
+    \caption{A comparison of asteroid position as identified within the program and asteroid position according the JPL's ephemeris~\citep{urania}.}
+    \label{tab:position}
+\end{table}
+\end{center}
+
+\bibliographystyle{plainnat}
+\bibliography{cite}
 
 \end{document}
