@@ -68,9 +68,46 @@ s2double = ((2/(tau3*(tau1+tau3)))*(s3-s2)) - ((2/(tau1*(tau1+tau3)))*(s2-s1))
 #r,rho AND rhodot
 
 r0 = 2.5 #AU
-rhoguess = rho(k,earth[1],s2,s2dot,s2double,r0)
-ractual = radius(rhoguess,earth[1],s2)
-rhoguess1 = rho(k,earth[1],s2,s2dot,s2double,ractual)
-ractual1 = radius(rhoguess,earth[1],s2)
-rhodotguess = rhodot(k,earth[1],s2,s2dot,s2double,ractual1)
+radiuslist = []
+rholist = []
+radiuslist.append(r0)
+
+test = rho(k,earth[1],s2,s2dot,s2double,r0)
+
+for i in range(10):
+	p = rho(k,earth[1],s2,s2dot,s2double,radiuslist[i])
+	rholist.append(p)
+	rval = radius(rholist[i],earth[1],s2)
+	radiuslist.append(rval)
+
+rhovel = rhodot(k,earth[1],s2,s2dot,s2double,radiuslist[len(rholist)-1])
+
+#print 'r = {0}, rho = {1}, rhodot = {2}'.format(radiuslist[9],rholist[9],rhovel)
+
+plt.figure()
+plt.subplot(211)
+plt.plot(rholist,'.')
+plt.title(r'$\rho$ iterative solution')
+plt.ylabel(r'$\rho$')
+plt.xlabel('Iteration')
+plt.subplot(212)
+plt.plot(radiuslist,'.')
+plt.title('radius iterative solution')
+plt.ylabel('r')
+plt.xlabel('Iteration')
+#plt.show()
+
+#r the vector and its time derivative
+
+asteroid = rholist[len(rholist)-1]*s2
+R1 = earth[0]
+R2 = earth[1]
+R3 = earth[2]
+
+r = R2 + asteroid
+
+R2dot = ((tau3/(tau1*(tau1+tau3)))*(R2-R1)) + ((tau1/(tau3*(tau1+tau3)))*(R3-R2))
+
+rdot = R2dot + rholist[len(rholist)-1]*s2dot + rhovel*s2
+
 
