@@ -1,0 +1,85 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{rotating}
+\usepackage[top=1in, bottom=1in, left=0.75in, right=0.75in]{geometry}
+\usepackage{graphicx}
+\usepackage[numbers,square,sort&compress]{natbib}
+\usepackage{setspace}
+\usepackage[cdot,mediumqspace,]{SIunits}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{mathtools}
+\usepackage{authblk}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+
+\begin{document}
+\onehalfspacing
+\title{Orbit Determination From Astrometry of Asteroids Ceres and Urania}
+\author{Natalie Price-Jones, with lab partners Patrick Dorval and Jessica Campbell}
+\date{3 February, 2014}
+\affil{\small{natalie.price.jones@mail.utoronto.ca}}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstract}
+\label{abstract}
+
+Astrometric measurements and Laplace's method for determining orbital elements were used in conjunction to predict the orbits of two major asteroids, Ceres and Urania. The data for Ceres were first used to test the somewhat convoluted method, and results were compared extensively with NASA's JPL Horizons ephemeris database~\citep{urania}. The process was then used on data taken on Urania nearly two years ago with the Dunlap Institute Telescope from Mt. Joy, New Mexico. The produced Keplerian orbital elements were then used to make predictions about the location of the asteroid at a future date.
+
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+\label{sec:intro}
+
+Accurate astrometry has much to offer the interested astrophysicist. Calculating the motions of celestial bodies with precision allows the plotting of trajectories across the sky, but there is much more to be gleaned than a simple path. For example, the retrograde motions of nearby planets led to multiple complex theories to explain the strange pattern until the idea of a heliocentric solar system was hit upon. The wobbles of distant star seem unnatural until one posits that it is part of a binary system, the fainter companion star only evident in its gravitational influence on its partner's position. These two applications, as well as countless otheres, require a high degree of accuracy in the measurements of an object's location. More importantly, the observer must have some notion of where the object should be - a prediction for the expected orbit. It was making such a prediction that served as the focus for this lab. 
+
+Three measured positions don't seem like enough to describe an entire orbit, but Laplace's method allows the committed researcher to extrapolate the measurements to the Keplerian orbital elements. The key assumption is that the system is composed of two bodies, where one object's mass is negligble compared to that of the other. The method is also limitted by the assumption that the measurements occur within an ideal amount of time - neither so short as to fail to see acceleration nor so long as to be unable to use a Taylor expansion. In the case of both asteroids observed for this report, the measurement interval was one to two days, an ideal amount of time. The use of this method and multiple coordinate transformations allowed orbit prediction for Urania, the first step towards further knowledge through astrometry.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Observations and Data}
+\label{sec:obs}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{c||c||c||c}
+   Date (UTC) & Time (UTC) & $\alpha$ (hr) & $\delta$ ($^o$) \\
+   \hline
+   \hline
+   20/01/12 & 04:28:30 & 02:57:54.59 & +19:14:41.9 \\
+   \hline
+   21/01/12 & 04:40:27 & 02:58:49.61 & +19:16:56.9 \\
+   \hline
+   23/01/12 & 05:43:40 & 03:00:4.11 & +19:21:45.0 \\
+   \hline
+   24/01/12 & 04:26:48 & 03:01:43.55 & +19:24:17.6 \\
+   \hline
+   29/01/12 & 01:27:18 & 03:07:01.64 & +19:38:19.4 \\
+   \end{tabular}
+    \caption{Dates and times of sources recorded with the Dunlap Institute Telescope at Mt. Joy New Mexico. Following convention, $\alpha$ is right ascension in hours and $\delta$ is declination in degrees. Information taken from the header of the provided .fts file for each observation.}
+    \label{tab:datatable}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Data Reduction and Methods}
+\label{sec:data}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Calculations and Modelling}
+\label{sec:calc}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Discussion}
+\label{sec:discussion}
+
+
+\bibliographystyle{plainnat}
+\bibliography{cite}
+
+\end{document}

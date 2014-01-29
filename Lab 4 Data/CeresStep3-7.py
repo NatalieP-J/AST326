@@ -35,6 +35,12 @@ def radius(rhoval,R,s):
 	Rmag = np.linalg.norm(R)
 	return np.sqrt((rhoval**2)+(Rmag**2)+2*rhoval*np.dot(R,s))
 
+def trueanomaly(eccentricity,angles):
+	return 2*np.arctan(np.sqrt((1+eccentricity)/(1-eccentricity))*np.tan(angles/2))
+
+def meananomalyE(E,e):
+	return E-e*np.sin(E)
+
 #MEASUREMENT DATES
 
 Julian = np.array([2454702.5,2454703.5,2454704.5])
@@ -72,30 +78,30 @@ radiuslist = []
 rholist = []
 radiuslist.append(r0)
 
-test = rho(k,earth[1],s2,s2dot,s2double,r0)
+R2 = earth[1]
 
 for i in range(10):
-	p = rho(k,earth[1],s2,s2dot,s2double,radiuslist[i])
+	p = rho(k,R2,s2,s2dot,s2double,radiuslist[i])
 	rholist.append(p)
-	rval = radius(rholist[i],earth[1],s2)
+	rval = radius(rholist[i],R2,s2)
 	radiuslist.append(rval)
 
-rhovel = rhodot(k,earth[1],s2,s2dot,s2double,radiuslist[len(rholist)-1])
+rhovel = rhodot(k,R2,s2,s2dot,s2double,radiuslist[len(rholist)-1])
 
 #print 'r = {0}, rho = {1}, rhodot = {2}'.format(radiuslist[9],rholist[9],rhovel)
 
 plt.figure()
 plt.subplot(211)
 plt.plot(rholist,'.')
-plt.title(r'$\rho$ iterative solution')
+plt.title('distance from Earth iterative solution')
 plt.ylabel(r'$\rho$')
 plt.xlabel('Iteration')
 plt.subplot(212)
 plt.plot(radiuslist,'.')
-plt.title('radius iterative solution')
+plt.title('orbital separation iterative solution')
 plt.ylabel('r')
 plt.xlabel('Iteration')
-#plt.show()
+plt.show()
 
 #r the vector and its time derivative
 
@@ -106,8 +112,30 @@ R3 = earth[2]
 
 r = R2 + asteroid
 
+rmag = radiuslist[len(radiuslist)-1]
+
 R2dot = ((tau3/(tau1*(tau1+tau3)))*(R2-R1)) + ((tau1/(tau3*(tau1+tau3)))*(R3-R2))
 
 rdot = R2dot + rholist[len(rholist)-1]*s2dot + rhovel*s2
 
+V = np.linalg.norm(rdot)
 
+a = (rmag*k**2)/((2*k**2)-(rmag*V**2))
+
+h = np.cross(r,rdot)
+
+hx,hy,hz = h
+
+hmag = np.linalg.norm(h)
+
+Omega = np.arctan(-hx/hy)
+i = np.arccos(hz/hmag)
+e = np.sqrt(1-((hmag**2)/(a*k**2)))
+E = np.arccos((a-rmag)/(a*e))
+E = -E
+nu = trueanomaly(e,E)
+M = meananomalyE(E,e)
+sumnu = np.arccos((r[0]*np.cos(Omega)+r[1]*np.sin(Omega))/rmag)
+omega = sumnu-nu
+n = np.sqrt((k**2)/(a**3))
+tau = Julian[1]-(M/n)
