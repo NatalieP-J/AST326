@@ -47,6 +47,45 @@ def circular(angles,radius):
 	y = radius*np.sin(angles)
 	return x,y
 
+def eqtopretty(ra,dec):
+	hr = []
+	minute = []
+	second = []
+	deg = []
+	arcminute = []
+	arcsecond = []
+	ra *= (12./np.pi)
+	dec /= rad
+	alpha = []
+	delta = []
+	for i in range(len(ra)):
+		if ra[i]<10:
+			hr.append(str(ra[i])[0])
+		if ra[i]>=10:
+			hr.append(str(ra[i])[0:2])
+		if dec[i]<10:
+			deg.append(str(dec[i])[0])
+		if dec[i]>=10:
+			deg.append(str(dec[i])[0:2])
+		minu = (ra[i]-float(hr[i]))*60
+		arcminu = (dec[i]-float(deg[i]))*60
+		if minu<10:
+			minute.append(str(minu)[0])
+		if minu>=10:
+			minute.append(str(minu)[0:2])
+		if arcminu<10:
+			arcminute.append(str(arcminu)[0])
+		if arcminu>=10:
+			arcminute.append(str(arcminu)[0:2])
+		sec = (minu - float(minute[i]))*60
+		arcsec = (arcminu - float(arcminute[i]))*60
+		second.append(str(np.round(sec,2)))
+		arcsecond.append(str(np.round(arcsec,1)))
+	for i in range(len(ra)):
+		alpha.append([hr[i],minute[i],second[i]])
+		delta.append([deg[i],arcminute[i],arcsecond[i]])
+	return np.array(alpha),np.array(delta)
+
 
 #FIXED PLATE CONSTANTS
 alpha = np.array([ 44.45476346,  44.68517463,  45.16998319,  45.40544173,  46.74507317])
@@ -73,16 +112,16 @@ delta *= rad
 
 #FIXED PLATE CONSTANTS 4
 
-alpha = array([ 44.45521841,  44.68467768,  45.17098658,  45.40514157,  46.7449028 ])
-delta = array([ 19.21813581,  19.27914174,  19.36052613,  19.40083071,  19.62835052])
+alpha4 = array([ 44.45521841,  44.68467768,  45.17098658,  45.40514157,  46.7449028 ])
+delta4 = array([ 19.21813581,  19.27914174,  19.36052613,  19.40083071,  19.62835052])
 
-alpha *= rad
-delta *= rad
+alpha4 *= rad
+delta4 *= rad
 
 #FIXED PLATE CONSTANTS 5
 
-alpha = array([ 0.77588993,  0.77989475,  0.78838244,  0.79246922,  0.81585246])
-delta = array([ 0.33541975,  0.3364845 ,  0.33790493,  0.33860837,  0.34257934])
+#alpha = array([ 0.77588993,  0.77989475,  0.78838244,  0.79246922,  0.81585246])
+#delta = array([ 0.33541975,  0.3364845 ,  0.33790493,  0.33860837,  0.34257934])
 
 #ORIGINAL PLATE CONSTANT VALUES
 #alpha = np.array([0.7759035722665991,0.7798931040484495,0.7883586781411437,0.7925532861101032,0.8157770734694528])
@@ -91,6 +130,9 @@ delta = array([ 0.33541975,  0.3364845 ,  0.33790493,  0.33860837,  0.34257934])
 #JPL HORIZONS
 alpha = np.array([0.7758846645330358,0.7799076484588828,0.7884001297108785,0.792482745719502,0.8149582231620589])
 delta = np.array([0.3358333457866623,0.33649026832456563,0.337912711664941,0.33861132817941986,0.3425708015130415])
+
+alpha = np.array([0.7758861189740791,0.7799091028999261,0.7884015841519219,0.7924856546015885,0.8149589503825805])
+delta = np.array([0.3358333457866623,0.33649026832456563,0.33791319647862217,0.338611812993101,0.34257128632672257])
 
 xeq = np.cos(alpha)*np.cos(delta)
 yeq = np.sin(alpha)*np.cos(delta)
@@ -203,18 +245,26 @@ M = meananomalyE(E,e)
 sumnu = np.arccos((r[0]*np.cos(Omega)+r[1]*np.sin(Omega))/rmag)
 omega = sumnu-nu
 n = np.sqrt((k**2)/(a**3))
-tau = Julian[1]-(M/n)
+tau = Julian[threesome[1]]-(M/n)
 
+
+#Calculate the orbital period from Kepler's third law
+
+n = np.sqrt((k**2)/(a**3)) 
 period = (2*np.pi)/n
 
 #Generate time intervals
-start = Julian[threesome[1]]
+
+start = tau
 JulianDay = np.arange(start,start+period+500,1)
 J = JulianDay - 2450000
 
+#Calculate the initial mean anomaly
 M = meananomalytime(n,tau,start)
+#Make guess that first eccentric anomaly is equal to the first mean anomaly
 E0 = M
 
+#Prepare list to hold stepped out numerical solution for eccentric anomaly
 E = []
 E.append(E0)
 
@@ -223,24 +273,17 @@ for i in range(1,len(JulianDay)):
 	En = E[i-1] + delE
 	E.append(En)
 
+#convert E to a more managable array
 E = np.array(E)
+#find the mean anomaly at each time
 M = meananomalytime(n,tau,JulianDay)
 
 v = trueanomaly(e,E)
 r = ellipseradius(E,a,e)
 
-theta = v+(omega*(np.pi/180))
+theta = v+omega
 
-perihelion = []
-vcheck = []
-for i in range(len(v)):
-	if np.round(v[i],1) == 0:
-		vcheck.append(v[i])
 
-for i in range(len(v)):
-	if v[i] == min(vcheck):
-		perihelion.append(r[i]*np.cos(theta[i]))
-		perihelion.append(r[i]*np.sin(theta[i]))
 
 #FIGURE 3
 
@@ -266,39 +309,42 @@ plt.plot(J,v,'k')
 plt.xlabel('Julian Day - 2450000')
 plt.ylabel('v [radians]')
 plt.title('True Anomaly Over Time')
-#plt.tight_layout()
-plt.show()
-
-#FIGURE 5
-
-plt.figure()
-plt.plot(circular(theta,a)[0],circular(theta,a)[1],':',label = 'Circular orbit radius = {0}'.format(a))
-plt.plot(r*np.cos(theta),r*np.sin(theta),'k',label = 'Calculated orbit')
-plt.plot(0,0,'k+')
-plt.plot(perihelion[0],perihelion[1],'ko')
-plt.axis('equal')
-plt.xlabel('x [AU]')
-plt.ylabel('y [AU]')
-plt.legend(loc = 'best')
-plt.title('Position of Urania in its Orbital Plane')
+plt.tight_layout()
 plt.show()
 
 time = Julian[threesome[3]]
 
+for i in range(len(JulianDay)):
+	if np.round(JulianDay[i])==np.round(time):
+		index = i
+
+rpos = []
+thetapos = []
+for i in range(len(Julian)):
+	for j in range(len(JulianDay)):
+		if np.round(JulianDay[j])==np.round(Julian[i]):
+			rpos.append(r[j])
+			thetapos.append(theta[j])
+
+rpos = np.array(rpos)
+thetapos = np.array(thetapos)
+
+
 Rearth = earth[threesome[3]]
 
-Mnew = meananomalytime(n,tau,time)
+#Mnew = meananomalytime(n,tau,time)
+Mnew = M[index]
 
-Enew = Eval + ((Mnew-M[threesome[3]])/(1-e*np.cos(Eval)))
+#Enew = Eval + ((Mnew-M[threesome[3]])/(1-e*np.cos(Eval)))
+Enew = E[index]
 
 v = trueanomaly(e,Enew)
 
-theta = v+omega
+thetanew = v+omega
 
 rmag = a*(1-e*np.cos(Enew))
 
-
-rvec = [rmag*np.cos(theta),rmag*np.sin(theta),0]
+rvec = [rmag*np.cos(thetanew),rmag*np.sin(thetanew),0]
 
 TzTx = [[np.cos(Omega),-np.sin(Omega)*np.cos(inc),np.sin(Omega)*np.sin(inc)],
 		[np.sin(Omega),np.cos(Omega)*np.cos(inc),-np.cos(Omega)*np.sin(inc)],
@@ -330,9 +376,24 @@ s = rhos/rho
 
 x,y,z = rhos[0]
 
-alpha = np.arctan2(y,x)
+alpha = np.arctan(y/x)
 
 delta = np.arcsin(z/rho)
+
+plt.figure()
+plt.plot(circular(theta,a)[0],circular(theta,a)[1],':',label = 'Circular orbit radius = {0}'.format(np.round(a,2)))
+plt.plot(r*np.cos(theta),r*np.sin(theta),'k',label = 'Calculated orbit')
+plt.plot(0,0,'k+')
+plt.plot(rpos*np.cos(thetapos),rpos*np.sin(thetapos),'b.',label = 'Observed positions')
+plt.plot(r[index]*np.cos(theta[index]),r[index]*np.sin(theta[index]),'ro',label = 'Prediction position')
+plt.plot(r[0]*np.cos(theta[0]),r[0]*np.sin(theta[0]),'ko')
+plt.axis('equal')
+plt.xlabel('x [AU]')
+plt.ylabel('y [AU]')
+plt.legend()
+plt.title('Position of Urania in its Orbital Plane')
+plt.show()
+
 
 
 #ACTUAL VALUES FOR COMPARISON FROM JPL
@@ -356,5 +417,3 @@ Tp = [2455833.225739588961,2455833.223487879615,2455833.218989328947,2455833.216
 
 #SEMI-MAJOR AXIS
 A = [2.365658853240622E+00,2.365652760888053E+00,2.365640563109902E+00,2.365634458983918E+00,2.365603913071018E+00]
-
-

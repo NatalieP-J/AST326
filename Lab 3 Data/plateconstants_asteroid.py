@@ -22,9 +22,13 @@ ax = []
 ay = []
 
 
+errx = []
+erry = []
+
 day = [19,20,22,23,28]
 
 for urania in range(5):
+	print 'Jan{0}'.format(urania)
 	skyname = '30Urania-S001-R001-C001-r-{0}.fts'.format(urania)
 	darkname = 'Dark-S001-R001-C001-B2-{0}.fts'.format(urania)
 	flatname = 'AutoFlat-Dusk-r-Bin2-001-{0}.fts'.format(urania)
@@ -32,19 +36,19 @@ for urania in range(5):
 	sky_time = s[0].header['exptime']
 	sky_date = s[0].header['date']
 	sky_hour = s[0].header['time-obs']
-	print 'Raw exposure {0}s'.format(sky_time)
-	print 'Raw date {0}'.format(sky_date)
-	print 'Raw time {0}'.format(sky_hour)
+	#print 'Raw exposure {0}s'.format(sky_time)
+	#print 'Raw date {0}'.format(sky_date)
+	#print 'Raw time {0}'.format(sky_hour)
 	sky = pf.getdata(skyname)
 	sky /= sky_time
 	s = pf.open(darkname)
 	dark_time = s[0].header['exptime']
-	print 'Dark exposure {0}s'.format(dark_time)
+	#print 'Dark exposure {0}s'.format(dark_time)
 	dark = pf.getdata(darkname)
 	dark /= dark_time
 	s = pf.open(flatname)
 	flat_time = s[0].header['exptime']
-	print 'Flat exposure {0}s'.format(flat_time)
+	#print 'Flat exposure {0}s'.format(flat_time)
 	flat = pf.getdata(flatname)
 	flat /= flat_time
 	f = flat-dark
@@ -102,6 +106,7 @@ for urania in range(5):
 
 	fov = 2048./(f/p)
 	fovam = (fov/radian)*60 #arcminute field of view
+	fov = 35
 
 	#star locations from catalogue
 	name,rad,ded,rmag = unso(radeg,dedeg,fovam)
@@ -237,7 +242,7 @@ for urania in range(5):
 	#convert matched catalogue values to standard coordinates
 	X_centroid = (Xvals-x0)/m
 	Y_centroid = (Yvals-y0)/m
-	
+
 	#construct B matrix
 	B = []
 	for i in range(len(X_centroid)):
@@ -261,13 +266,13 @@ for urania in range(5):
 	x_chi = M.T*M
 	dof = len(Xvals)-3
 	red_chi_x = x_chi/dof
-	print 'a11 = {0}, \na12 = {1}, \nx0 = {2}, \nwith reduced chi squared = {3}'.format(x_consts[0],x_consts[1],x_consts[2],red_chi_x)
+	#print 'a11 = {0}, \na12 = {1}, \nx0 = {2}, \nwith reduced chi squared = {3}'.format(x_consts[0],x_consts[1],x_consts[2],red_chi_x)
 	y_consts = (np.linalg.inv(B.T*B))*B.T*yi
 	M = yi - B*y_consts
 	y_chi = M.T*M
 	dof = len(Yvals)-3
 	red_chi_y = y_chi/dof
-	print 'a21 = {0}, \na22 = {1}, \ny0 = {2}, \nwith reduced chi squared = {3}'.format(y_consts[0],y_consts[1],y_consts[2],red_chi_y)
+	#print 'a21 = {0}, \na22 = {1}, \ny0 = {2}, \nwith reduced chi squared = {3}'.format(y_consts[0],y_consts[1],y_consts[2],red_chi_y)
 
 	T = np.matrix([[m*x_consts[0],m*x_consts[1],x_consts[2]],
 		[m*y_consts[0],m*y_consts[1],y_consts[2]],
@@ -387,13 +392,13 @@ for urania in range(5):
 	x_chi = M.T*M
 	dof = len(Xvals)-3
 	red_chi_x = x_chi/dof
-	print 'a11 = {0}, \na12 = {1}, \nx0 = {2}, \nwith reduced chi squared = {3}'.format(x_consts[0],x_consts[1],x_consts[2],red_chi_x)
+	#print 'a11 = {0}, \na12 = {1}, \nx0 = {2}, \nwith reduced chi squared = {3}'.format(x_consts[0],x_consts[1],x_consts[2],red_chi_x)
 	y_consts = (np.linalg.inv(B.T*B))*B.T*yi
 	M = yi - B*y_consts
 	y_chi = M.T*M
 	dof = len(Yvals)-3
 	red_chi_y = y_chi/dof
-	print 'a21 = {0}, \na22 = {1}, \ny0 = {2}, \nwith reduced chi squared = {3}'.format(y_consts[0],y_consts[1],y_consts[2],red_chi_y)
+	#print 'a21 = {0}, \na22 = {1}, \ny0 = {2}, \nwith reduced chi squared = {3}'.format(y_consts[0],y_consts[1],y_consts[2],red_chi_y)
 
 	T = np.matrix([[m*x_consts[0],m*x_consts[1],x_consts[2]],
 		[m*y_consts[0],m*y_consts[1],y_consts[2]],
@@ -486,7 +491,7 @@ for urania in range(5):
 	X_centroid = np.array(X_centroid)
 	Y_centroid = np.array(Y_centroid)
 
-	print X_centroid
+	#print X_centroid
 
 	#construct B matrix
 	B = []
@@ -503,13 +508,13 @@ for urania in range(5):
 	x_chi = M.T*M
 	dof = len(Xvals)-3
 	red_chi_x = x_chi/dof
-	print 'a11 = {0}, \na12 = {1}, \nx0 = {2}, \nwith reduced chi squared = {3}'.format(x_consts[0],x_consts[1],x_consts[2],red_chi_x)
+	#print 'a11 = {0}, \na12 = {1}, \nx0 = {2}, \nwith reduced chi squared = {3}'.format(x_consts[0],x_consts[1],x_consts[2],red_chi_x)
 	y_consts = (np.linalg.inv(B.T*B))*B.T*yi
 	M = yi - B*y_consts
 	y_chi = M.T*M
 	dof = len(Yvals)-3
 	red_chi_y = y_chi/dof
-	print 'a21 = {0}, \na22 = {1}, \ny0 = {2}, \nwith reduced chi squared = {3}'.format(y_consts[0],y_consts[1],y_consts[2],red_chi_y)
+	#print 'a21 = {0}, \na22 = {1}, \ny0 = {2}, \nwith reduced chi squared = {3}'.format(y_consts[0],y_consts[1],y_consts[2],red_chi_y)
 
 	T = np.matrix([[m*x_consts[0],m*x_consts[1],x_consts[2]],
 		[m*y_consts[0],m*y_consts[1],y_consts[2]],
@@ -591,7 +596,7 @@ for urania in range(5):
 	X_centroid = np.array(X_centroid)
 	Y_centroid = np.array(Y_centroid)
 
-	print X_centroid
+	#print X_centroid
 
 	#construct B matrix
 	B = []
@@ -608,13 +613,13 @@ for urania in range(5):
 	x_chi = M.T*M
 	dof = len(Xvals)-3
 	red_chi_x = x_chi/dof
-	print 'a11 = {0}, \na12 = {1}, \nx0 = {2}, \nwith reduced chi squared = {3}'.format(x_consts[0],x_consts[1],x_consts[2],red_chi_x)
+	#print 'a11 = {0}, \na12 = {1}, \nx0 = {2}, \nwith reduced chi squared = {3}'.format(x_consts[0],x_consts[1],x_consts[2],red_chi_x)
 	y_consts = (np.linalg.inv(B.T*B))*B.T*yi
 	M = yi - B*y_consts
 	y_chi = M.T*M
 	dof = len(Yvals)-3
 	red_chi_y = y_chi/dof
-	print 'a21 = {0}, \na22 = {1}, \ny0 = {2}, \nwith reduced chi squared = {3}'.format(y_consts[0],y_consts[1],y_consts[2],red_chi_y)
+	#print 'a21 = {0}, \na22 = {1}, \ny0 = {2}, \nwith reduced chi squared = {3}'.format(y_consts[0],y_consts[1],y_consts[2],red_chi_y)
 
 	T = np.matrix([[m*x_consts[0],m*x_consts[1],x_consts[2]],
 		[m*y_consts[0],m*y_consts[1],y_consts[2]],
@@ -668,7 +673,9 @@ for urania in range(5):
 	xvecs = np.array(xvecs2)
 
 	xerror = np.mean(abs(xi-xi_check))
+	errx.append(xerror)
 	yerror = np.mean(abs(yi-yi_check))
+	erry.append(yerror)
 
 	print 'Error in x position is {0} pixels'.format(xerror)
 	print 'Error in y position is {0} pixels'.format(yerror)

@@ -19,6 +19,16 @@ def rho(k,R,s,sdot,sdouble,r):
 	constants = (k**2)*((1./Rmag**3)-(1./r**3))
 	return constants*(numerator/denominator)
 
+def rhoerr(k,R,s,sdot,sdouble,serr,sdoterr,sdoubleerr,r,rerr):
+	Rmag = np.linalg.norm(R)
+	C = ((k**2)/2)*((1./Rmag**3)-(1./r**3))
+	deriv = np.array([1,1,1])
+	delrhos = C*((np.dot(sdot,np.cross(R,deriv))*np.dot(sdot,np.cross(sdouble,s))-np.dot(sdot,np.cross(sdouble,deriv))*np.dot(sdot,np.cross(R,s)))/(np.dot(sdot,np.cross(sdouble,s)))**2)
+	delrhosdot = C*((np.dot(deriv,np.cross(R,s)*np.dot(sdot,np.cross(sdouble,s))-np.dot(deriv,np.cross(sdouble,s))*np.dot(sdot,np.cross(R,s))))/(np.dot(sdot,np.cross(sdouble,s)))**2)
+	delrhosdou = C*((-np.dot(sdot,np.cross(R,s))*np.dot(sdot,np.cross(deriv,s)))/(np.dot(sdot,np.cross(sdouble,s)))**2)
+	delrhor = (k**2)*(3/r**4)*((np.dot(sdot,np.cross(R,s)))/np.dot(sdot,np.cross(sdouble,s)))
+	return np.sqrt((delrhos*serr)**2+(delrhosdot*sdoterr)**2+(delrhosdou*sdoubleerr)**2+(delrhor*rerr))
+
 def rhodot(k,R,s,sdot,sdouble,r):
 	numerator = np.dot(sdouble,np.cross(R,s))
 	denominator = np.dot(sdouble,np.cross(sdot,s))
@@ -29,6 +39,13 @@ def rhodot(k,R,s,sdot,sdouble,r):
 def radius(rhoval,R,s):
 	Rmag = np.linalg.norm(R)
 	return np.sqrt((rhoval**2)+(Rmag**2)+2*rhoval*np.dot(R,s))
+
+def radiuserr(rhoval,rhovalerr,R,s,serr):
+	Rmag = np.linalg.norm(R)
+	r = np.sqrt((rhoval**2)+(Rmag**2)+2*rhoval*np.dot(R,s))
+	delrrho = (1./r)*(rhoval+np.dot(R,s))
+	delrs = (1./r)*(rhoval*np.dot(R,s))
+	return np.sqrt((delrrho*rhovalerr)**2+(delrs*serr)**2)
 
 def trueanomaly(eccentricity,angles):
 	return 2*np.arctan(np.sqrt((1+eccentricity)/(1-eccentricity))*np.tan(angles/2))
@@ -47,30 +64,6 @@ def circular(angles,radius):
 	y = radius*np.sin(angles)
 	return x,y
 
-
-#FIXED PLATE CONSTANTS
-alpha = np.array([ 44.45476346,  44.68517463,  45.16998319,  45.40544173,  46.74507317])
-delta = np.array([ 19.22012634,  19.27927308,  19.36130666,  19.40179464,  19.62966489])
-
-alpha *= rad
-delta *= rad
-
-
-#FIXED PLATE CONSTANTS 2
-#alpha = np.array([ 44.45520121,  44.68462435,  45.17100625,  45.40512013,  46.74491543])
-#delta = np.array([ 19.21813892,  19.27919904,  19.36062503,  19.40083402,  19.62834761])
-
-#alpha *= rad
-#delta *= rad
-
-#FIXED PLATE CONSTANTS 3
-
-alpha = array([ 44.45520355,  44.6846627 ,  45.17103566,  45.40516589,  46.74488949])
-delta = array([ 19.21809831,  19.27913561,  19.36053285,  19.40081702,  19.62836982])
-
-alpha *= rad
-delta *= rad
-
 #FIXED PLATE CONSTANTS 4
 
 alpha = array([ 44.45521841,  44.68467768,  45.17098658,  45.40514157,  46.7449028 ])
@@ -79,39 +72,50 @@ delta = array([ 19.21813581,  19.27914174,  19.36052613,  19.40083071,  19.62835
 alpha *= rad
 delta *= rad
 
-#FIXED PLATE CONSTANTS 5
+#ERRORS IN MEASUREMENTS
 
-alpha = array([ 0.77588993,  0.77989475,  0.78838244,  0.79246922,  0.81585246])
-delta = array([ 0.33541975,  0.3364845 ,  0.33790493,  0.33860837,  0.34257934])
-
-#ORIGINAL PLATE CONSTANT VALUES
-#alpha = np.array([0.7759035722665991,0.7798931040484495,0.7883586781411437,0.7925532861101032,0.8157770734694528])
-#delta = np.array([0.3356980827696327,0.33643548437860027,0.33799949331385964,0.33857448233965554,0.3427288507730832])
-
-#JPL HORIZONS
-#alpha = np.array([0.7758846645330358,0.7799076484588828,0.7884001297108785,0.792482745719502,0.8149582231620589])
-#delta = np.array([0.3358333457866623,0.33649026832456563,0.337912711664941,0.33861132817941986,0.3425708015130415])
+alphaerr = array([ 0.00577571,  0.0058012 ,  0.00582736,  0.00571606,  0.00588477])
+deltaerr = array([ 0.0059024 ,  0.0055641 ,  0.00571975,  0.00558783,  0.00578666])
 
 xeq = np.cos(alpha)*np.cos(delta)
 yeq = np.sin(alpha)*np.cos(delta)
 zeq = np.sin(delta)
+
+def coordshifterr(alpha,delta,alphaerr,deltaerr):
+	xeq = np.cos(alpha)*np.cos(delta)
+	yeq = np.sin(alpha)*np.cos(delta)
+	zeq = np.sin(delta)
+	xerr = np.sqrt((-yeq*alphaerr)**2+(-np.sin(delta)*np.cos(alpha)*deltaerr)**2)
+	yerr = np.sqrt((xeq*alphaerr)**2+(-np.sin(alpha)*np.sin(delta)*deltaerr)**2)
+	zerr = np.sqrt((np.cos(delta)*deltaerr)**2)
+	return xerr,yerr,zerr
+
+xerr,yerr,zerr = coordshifterr(alpha,delta,alphaerr,deltaerr)
 
 epsilon = 23.43929111*rad
 
 T = [[1,0,0],[0,np.cos(epsilon),np.sin(epsilon)],[0,-np.sin(epsilon),np.cos(epsilon)]]
 T = np.matrix(T)
 
+s_err = []
 s = []
 
 for i in range(len(alpha)):
 	r = [xeq[i],yeq[i],zeq[i]]
+	r_err = [xerr[i],yerr[i],zerr[i]]
 	r = np.matrix(r)
+	r_err = np.matrix(r_err)
 	r = r.T
+	r_err = r_err.T
 	ecliptic = T*r
+	ecliptic_err = T*r_err
 	ecliptic = np.array(ecliptic.T)
+	ecliptic_err = np.array(ecliptic_err.T)
 	s.append([ecliptic[0][0],ecliptic[0][1],ecliptic[0][2]])
+	s_err.append([ecliptic_err[0][0],ecliptic_err[0][1],ecliptic_err[0][2]])
 
 s = np.array(s)
+s_err = np.array(s_err)
 
 earth = np.array([	[-4.852325900266916e-01,  8.563819442309909e-01, -2.676783649804444e-05],
 					[-5.005639235484095e-01,  8.476786115155864e-01, -2.723171022212407e-05],
@@ -119,6 +123,19 @@ earth = np.array([	[-4.852325900266916e-01,  8.563819442309909e-01, -2.676783649
 					[-5.450861676152123e-01,  8.202934515047903e-01, -2.812109168370201e-05],
 					[-6.143806933050102e-01,  7.707734163615326e-01, -2.700019419225799e-05]])
 
+
+actuals = np.array([[1.073459020670066E+00,  1.175275572464343E+00,  6.266997776117721E-02],
+					[1.077052532037185E+00,  1.188320067084311E+00,  6.242712185034433E-02],
+					[1.083793604385678E+00,  1.215389298506962E+00,  6.192856377902563E-02],
+					[1.086660494660806E+00,  1.228204989345288E+00,  6.169477872353334E-02],
+					[1.098706174782393E+00,  1.296878129932550E+00,  6.046177329415765E-02]])
+
+snew = []
+rhovals = []
+
+for i in range(len(actuals)):
+	snew.append(actuals[i]/np.linalg.norm(actuals[i]))
+	rhovals.append(np.linalg.norm(actuals[i]))
 
 times = [	'2012-01-20 04:28:30',
 			'2012-01-21 04:40:27',
@@ -134,27 +151,47 @@ threesome = [1,2,3,4]
 s1 = np.array(s[threesome[0]])
 s2 = np.array(s[threesome[1]])
 s3 = np.array(s[threesome[2]])
+s1err = np.array(s_err[threesome[0]])
+s2err = np.array(s_err[threesome[1]])
+s3err = np.array(s_err[threesome[2]])
 
 tau1 = Julian[threesome[1]]-Julian[threesome[0]]
 tau3 = Julian[threesome[2]]-Julian[threesome[1]]
 
 s2dot = ((tau3/(tau1*(tau1+tau3)))*(s2-s1)) + ((tau1/(tau3*(tau1+tau3)))*(s3-s2))
+s2doterr = ((tau3/(tau1*(tau1+tau3)))*(s2err-s1err)) + ((tau1/(tau3*(tau1+tau3)))*(s3err-s2err))
 s2double = ((2/(tau3*(tau1+tau3)))*(s3-s2)) - ((2/(tau1*(tau1+tau3)))*(s2-s1))
+s2doubleerr = ((2/(tau3*(tau1+tau3)))*(s3err-s2err)) - ((2/(tau1*(tau1+tau3)))*(s2err-s1err))
+
+#s2doterr = np.sqrt(((tau3/(tau1*(tau1+tau3)))*s1err)**2+((tau1/(tau3*(tau1+tau3)))*s3err)**2+(((tau3/(tau1*(tau1+tau3)))-(tau1/(tau3*(tau1+tau3))))*s2err)**2)
+#s2doubleerr = np.sqrt(((2/(tau1*(tau1+tau3)))*s1err)**2+((2/(tau3*(tau1+tau3)))*s3err)**2+(((-2/(tau3*(tau1+tau3)))+(-2/(tau1*(tau1+tau3))))*s2err)**2)
+
+s2err = np.linalg.norm(s2err)
+s2doterr = np.linalg.norm(s2doterr)
+s2doubleerr = np.linalg.norm(s2doubleerr)
 
 r0 = 2.0 #AU
 radiuslist = []
+radiuslisterr = []
 rholist = []
+rholisterr = []
 radiuslist.append(r0)
+radiuslisterr.append(0)
 
 R2 = earth[threesome[1]]
 
 for i in range(100):
 	p = rho(k,R2,s2,s2dot,s2double,radiuslist[i])
 	rholist.append(p)
+	perr = rhoerr(k,R2,s2,s2dot,s2double,s2err,s2doterr,s2doubleerr,radiuslist[i],radiuslisterr[i])
+	rholisterr.append(perr)
 	rval = radius(rholist[i],R2,s2)
 	radiuslist.append(rval)
+	rvalerr = radiuserr(rholist[i],rholisterr[i],R2,s2,s2err)
+	radiuslisterr.append(rvalerr)
 
 rhovel = rhodot(k,R2,s2,s2dot,s2double,radiuslist[len(rholist)-1])
+#rhovelerr = rhodot(k,R2,s2err,s2doterr,s2doubleerr,radiuslisterr[len(rholist)-1])
 
 plt.figure()
 plt.subplot(211)
@@ -203,12 +240,12 @@ M = meananomalyE(E,e)
 sumnu = np.arccos((r[0]*np.cos(Omega)+r[1]*np.sin(Omega))/rmag)
 omega = sumnu-nu
 n = np.sqrt((k**2)/(a**3))
-tau = Julian[1]-(M/n)
+tau = Julian[threesome[1]]-(M/n)
 
 period = (2*np.pi)/n
 
 #Generate time intervals
-start = Julian[threesome[1]]
+start = tau
 JulianDay = np.arange(start,start+period+500,1)
 J = JulianDay - 2450000
 
@@ -229,18 +266,7 @@ M = meananomalytime(n,tau,JulianDay)
 v = trueanomaly(e,E)
 r = ellipseradius(E,a,e)
 
-theta = v+(omega*(np.pi/180))
-
-perihelion = []
-vcheck = []
-for i in range(len(v)):
-	if np.round(v[i],1) == 0:
-		vcheck.append(v[i])
-
-for i in range(len(v)):
-	if v[i] == min(vcheck):
-		perihelion.append(r[i]*np.cos(theta[i]))
-		perihelion.append(r[i]*np.sin(theta[i]))
+theta = v+omega
 
 #FIGURE 3
 
@@ -266,20 +292,20 @@ plt.plot(J,v,'k')
 plt.xlabel('Julian Day - 2450000')
 plt.ylabel('v [radians]')
 plt.title('True Anomaly Over Time')
-#plt.tight_layout()
+plt.tight_layout()
 plt.show()
 
 #FIGURE 5
 
 plt.figure()
-plt.plot(circular(theta,a)[0],circular(theta,a)[1],':',label = 'Circular orbit radius = {0}'.format(a))
+plt.plot(circular(theta,a)[0],circular(theta,a)[1],':',label = 'Circular orbit radius = {0}'.format(np.round(a,2)))
 plt.plot(r*np.cos(theta),r*np.sin(theta),'k',label = 'Calculated orbit')
 plt.plot(0,0,'k+')
-plt.plot(perihelion[0],perihelion[1],'ko')
+plt.plot(r[0]*np.cos(theta[0]),r[0]*np.sin(theta[0]),'ko')
 plt.axis('equal')
 plt.xlabel('x [AU]')
 plt.ylabel('y [AU]')
-plt.legend(loc = 'best')
+plt.legend()
 plt.title('Position of Urania in its Orbital Plane')
 plt.show()
 
@@ -287,9 +313,13 @@ time = Julian[threesome[3]]
 
 Rearth = earth[threesome[3]]
 
-Mnew = meananomalytime(n,tau,time)
+for i in range(len(JulianDay)):
+	if np.round(JulianDay[i])==np.round(time):
+		index = i
 
-Enew = Eval + ((Mnew-M[threesome[3]])/(1-e*np.cos(Eval)))
+Mnew = M[index]
+
+Enew = E[index]
 
 v = trueanomaly(e,Enew)
 
@@ -356,5 +386,4 @@ Tp = [2455833.225739588961,2455833.223487879615,2455833.218989328947,2455833.216
 
 #SEMI-MAJOR AXIS
 A = [2.365658853240622E+00,2.365652760888053E+00,2.365640563109902E+00,2.365634458983918E+00,2.365603913071018E+00]
-
 

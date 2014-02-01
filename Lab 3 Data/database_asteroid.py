@@ -68,17 +68,17 @@ yconsts = array([array([  2.47581705e-02,   9.99511216e-01,   1.04214452e+03]),
  array([  1.96459472e-02,   9.98868468e-01,   1.02039048e+03]),
  array([  1.96506031e-02,   9.99660004e-01,   1.05630889e+03])])
 
-xconsts = array([array([  0.99648857,  -0.07624251,  11.70863138]),
- array([  0.99513465,  -0.0815502 ,  16.96731601]),
- array([  0.99386848,  -0.07200066,  20.71743614]),
- array([ 0.99701408, -0.0817461 ,  1.67262752]),
- array([  0.9974239 ,  -0.07773412,  28.8356022 ])])
+#xconsts = array([array([  0.99648857,  -0.07624251,  11.70863138]),
+ #array([  0.99513465,  -0.0815502 ,  16.96731601]),
+ #array([  0.99386848,  -0.07200066,  20.71743614]),
+ #array([ 0.99701408, -0.0817461 ,  1.67262752]),
+ #array([  0.9974239 ,  -0.07773412,  28.8356022 ])])
 
-yconsts = array([array([  0.07496755,   1.0016526 ,  35.26575224]),
- array([  0.07859702,   0.99709227, -25.67090719]),
- array([ 0.08197606,  0.99824204,  1.47923735]),
- array([  0.07365477,   0.99179891, -22.15739878]),
- array([  0.078643  ,   0.9976034 ,  12.35748455])])
+#yconsts = array([array([  0.07496755,   1.0016526 ,  35.26575224]),
+ #array([  0.07859702,   0.99709227, -25.67090719]),
+ #array([ 0.08197606,  0.99824204,  1.47923735]),
+ #array([  0.07365477,   0.99179891, -22.15739878]),
+ #array([  0.078643  ,   0.9976034 ,  12.35748455])])
 
 asteroid_x = [1089.5,1090.5,1065,1088.5,1071.5]
 asteroid_y = [977.5,1039.5,1008,1039,1025]
@@ -86,6 +86,16 @@ actual_ax = [1087.1291575346165,1089.0752263384331,1063.9500813357831,1087.08361
 actual_ay = [992.70536623976943,1008.3996993378165,1040.0641397572322,1008.8906946228163,1022.642015275929]
 radian = np.pi/180
 errors = [0.755029807194,0.756458254734]
+errx = [0.25786904476328026,
+ 0.27488885098380755,
+ 0.27771855436432702,
+ 0.33436757334249567,
+ 0.22943487755904593]
+erry = [0.15456535886925898,
+ 0.18251594003294891,
+ 0.28021947623692728,
+ 0.22396105386579634,
+ 0.22582067312144716] 
 f = 3420
 p = 0.018
 m = f/p
@@ -102,6 +112,20 @@ def pix2rad(p0,X,Y):
 	dec = np.arcsin((np.sin(dec0)+Y*np.cos(dec0))/((1+(X**2)+(Y**2))**0.5))
 	return ra,dec
 
+def pix2raderr(p0,X,Y,Xerr,Yerr):
+	ra0,dec0 = p0
+	ravar = -X/(np.cos(dec0)-Y*np.sin(dec0))
+	decvar = (np.sin(dec0)+Y*np.cos(dec0))/((1+(X**2)+(Y**2))**0.5)
+	sq = np.sqrt(1+X**2+Y**2)
+	delaX = (1/(1+ravar**2))*(-1/(np.cos(dec0)-Y*np.sin(dec0)))
+	delaY = (1/(1+ravar**2))*(-np.sin(dec0)*X/((np.cos(dec0)-Y*np.sin(dec0))**2))
+	deldX = (1/(1-decvar**2))*((-X/sq)*(np.sin(dec0)+Y*np.cos(dec0))/sq**2)
+	deldY = (1/(1-decvar**2))*((np.cos(dec0)*sq - (Y/sq)*(np.sin(dec0)+Y*np.cos(dec0)))/sq**2)
+	alphaerr = np.sqrt((delaX*Xerr)**2+(delaY*Yerr)**2)
+	deltaerr = np.sqrt((deldX*Xerr)**2+(deldY*Yerr)**2)
+	return alphaerr,deltaerr
+
+
 righta = []
 decl = []
 Xasteroid = []
@@ -110,6 +134,13 @@ actual_asteroidx = []
 actual_asteroidy = []
 xerrors = []
 yerrors = []
+
+
+alphaerrs = []
+deltaerrs = []
+
+alphaerrs2 = []
+deltaerrs2 = []
 
 for urania in range(5):
 	T = []
@@ -159,8 +190,8 @@ for urania in range(5):
 	aY = Tinv[1,0]*asteroid_x[urania]+Tinv[1,1]*asteroid_y[urania]+Tinv[1,2]
 	actual_aX = Tinv[0,0]*actual_ax[urania]+Tinv[0,1]*actual_ay[urania]+Tinv[0,2]
 	actual_aY = Tinv[1,0]*actual_ax[urania]+Tinv[1,1]*actual_ay[urania]+Tinv[1,2]
-	xerror = Tinv[0,0]*errors[0]+Tinv[0,1]*errors[1]+Tinv[0,2]
-	yerror = Tinv[1,0]*errors[0]+Tinv[1,1]*errors[1]+Tinv[1,2]
+	xerror = Tinv[0,0]*errx[urania]+Tinv[0,1]*erry[urania]+Tinv[0,2]
+	yerror = Tinv[1,0]*errx[urania]+Tinv[1,1]*erry[urania]+Tinv[1,2]
 	s1 = pf.open(skyname)
 	ras = s1[0].header['ra']
 	des = s1[0].header['dec']
@@ -172,19 +203,16 @@ for urania in range(5):
 	ra,dec = pix2rad([ra0,dec0],X,Y)
 	Xa,Ya = pix2rad([ra0,dec0],aX,aY)
 	actualx,actualy = pix2rad([ra0,dec0],actual_aX,actual_aY)
-	checkx,checky = pix2rad([ra0,dec0],(actual_aX+xerror),(actual_aY+yerror))
-	Xerror = abs(actualx-checkx)
-	Yerror = abs(actualy-checky)
-	Xerror /= radian
-	Yerror /= radian
+	alphaerr,deltaerr = pix2raderr([ra0,dec0],actual_aX,actual_aY,xerror,yerror)
+	alphaerr2,deltaerr2 = pix2rad([ra0,dec0],xerror,yerror)
 	ra /= radian
 	dec /= radian
 	Xa /= radian
 	Ya /= radian
-	actualx /= radian
-	actualy /= radian
-	xerrors.append(Xerror)
-	yerrors.append(Yerror)
+	alphaerrs.append(alphaerr)
+	deltaerrs.append(deltaerr)
+	alphaerrs2.append(alphaerr2)
+	deltaerrs2.append(deltaerr2)
 	actual_asteroidx.append(actualx)
 	actual_asteroidy.append(actualy)
 	Xasteroid.append(Xa)
@@ -196,6 +224,10 @@ Xasteroid = np.array(Xasteroid)
 Yasteroid = np.array(Yasteroid)
 actual_asteroidx = np.array(actual_asteroidx)
 actual_asteroidy = np.array(actual_asteroidy)
+alphaerrs = np.array(alphaerrs)
+deltaerrs = np.array(deltaerrs)
+alphaerrs2 = np.array(alphaerrs2)
+deltaerrs2 = np.array(deltaerrs2)
 
 #GET PROPER MOTION
 

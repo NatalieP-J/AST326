@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import LogNorm
 
-asteroid_x = [1089.5,1090.5,1065,1088.5,1071.5]
-asteroid_y = [977.5,1039.5,1008,1039,1025]
+asteroid_x = [1090,1090.5,1065,1088.5,1071]
+asteroid_y = [978,1039.5,1008,1039,1025]
 
 centroids = True
 
