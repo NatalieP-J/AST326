@@ -36,6 +36,16 @@ def rhodot(k,R,s,sdot,sdouble,r):
 	constants = ((k**2)/2)*((1./Rmag**3)-(1./r**3))
 	return constants*(numerator/denominator)
 
+def rhodoterr(k,R,s,sdot,sdouble,serr,sdoterr,sdoubleerr,r,rerr):
+	Rmag = np.linalg.norm(R)
+	C = ((k**2)/2)*((1./Rmag**3)-(1./r**3))
+	deriv = np.array([1,1,1])
+	delrhodotr = ((3*k**2)/(2*r**4))*(np.dot(sdouble,np.cross(R,s))/np.dot(sdouble,np.cross(sdot,s)))
+	delrhodots = C*((np.dot(sdouble,np.cross(R,deriv))*np.dot(sdouble,np.cross(sdot,s))-np.dot(sdouble,np.cross(R,s))*np.dot(sdouble,np.cross(sdot,deriv)))/((np.dot(sdouble,np.cross(sdot,s)))**2))
+	delrhodotsdot = C*((-np.dot(sdouble,np.cross(R,s))*np.dot(sdouble,np.cross(deriv,s)))/((np.dot(sdouble,np.cross(sdot,s)))**2))
+	delrhodotsdou = C*((np.dot(deriv,np.cross(R,s))*np.dot(sdouble,np.cross(sdot,s))-np.dot(deriv,np.cross(sdot,s))*np.dot(sdouble,np.cross(R,s)))/((np.dot(sdouble,np.cross(sdot,s)))**2))
+	return np.sqrt((delrhodotr*rerr)**2+(delrhodots*serr)**2+(delrhodotsdot*sdoterr)**2+(delrhodotsdou*sdoubleerr)**2)
+
 def radius(rhoval,R,s):
 	Rmag = np.linalg.norm(R)
 	return np.sqrt((rhoval**2)+(Rmag**2)+2*rhoval*np.dot(R,s))
@@ -50,6 +60,9 @@ def radiuserr(rhoval,rhovalerr,R,s,serr):
 def trueanomaly(eccentricity,angles):
 	return 2*np.arctan(np.sqrt((1+eccentricity)/(1-eccentricity))*np.tan(angles/2))
 
+def trueanomaly1(eccentricity,angles):
+	return 2*np.arctan(np.sqrt(-(1+eccentricity)/(1-eccentricity))*np.tan(angles/2))
+
 def meananomalyE(E,e):
 	return E-e*np.sin(E)
 
@@ -63,6 +76,12 @@ def circular(angles,radius):
 	x = radius*np.cos(angles)
 	y = radius*np.sin(angles)
 	return x,y
+
+def rvecerr(R,rhoval,s,rhoerr,serr):
+	return np.sqrt((s*rhoerr)**2+(rhoval*serr)**2)
+
+def rdotvecerr(R,rhoval,s,rhovel,sdot,rhoerr,serr,rhovelerr,sdoterr):
+	return np.sqrt((sdot*rhoerr)**2+(rhoval*sdoterr)**2+(rhovel*serr)**2+(s*rhovelerr)**2)
 
 #FIXED PLATE CONSTANTS 4
 
@@ -166,9 +185,9 @@ s2doubleerr = ((2/(tau3*(tau1+tau3)))*(s3err-s2err)) - ((2/(tau1*(tau1+tau3)))*(
 #s2doterr = np.sqrt(((tau3/(tau1*(tau1+tau3)))*s1err)**2+((tau1/(tau3*(tau1+tau3)))*s3err)**2+(((tau3/(tau1*(tau1+tau3)))-(tau1/(tau3*(tau1+tau3))))*s2err)**2)
 #s2doubleerr = np.sqrt(((2/(tau1*(tau1+tau3)))*s1err)**2+((2/(tau3*(tau1+tau3)))*s3err)**2+(((-2/(tau3*(tau1+tau3)))+(-2/(tau1*(tau1+tau3))))*s2err)**2)
 
-s2err = np.linalg.norm(s2err)
-s2doterr = np.linalg.norm(s2doterr)
-s2doubleerr = np.linalg.norm(s2doubleerr)
+mags2err = np.linalg.norm(s2err)
+mags2doterr = np.linalg.norm(s2doterr)
+mags2doubleerr = np.linalg.norm(s2doubleerr)
 
 r0 = 2.0 #AU
 radiuslist = []
@@ -183,15 +202,15 @@ R2 = earth[threesome[1]]
 for i in range(100):
 	p = rho(k,R2,s2,s2dot,s2double,radiuslist[i])
 	rholist.append(p)
-	perr = rhoerr(k,R2,s2,s2dot,s2double,s2err,s2doterr,s2doubleerr,radiuslist[i],radiuslisterr[i])
+	perr = rhoerr(k,R2,s2,s2dot,s2double,mags2err,mags2doterr,mags2doubleerr,radiuslist[i],radiuslisterr[i])
 	rholisterr.append(perr)
 	rval = radius(rholist[i],R2,s2)
 	radiuslist.append(rval)
-	rvalerr = radiuserr(rholist[i],rholisterr[i],R2,s2,s2err)
+	rvalerr = radiuserr(rholist[i],rholisterr[i],R2,s2,mags2err)
 	radiuslisterr.append(rvalerr)
 
 rhovel = rhodot(k,R2,s2,s2dot,s2double,radiuslist[len(rholist)-1])
-#rhovelerr = rhodot(k,R2,s2err,s2doterr,s2doubleerr,radiuslisterr[len(rholist)-1])
+rhovelerr = rhodoterr(k,R2,s2,s2dot,s2double,mags2err,mags2doterr,mags2doubleerr,radiuslist[len(rholist)-1],radiuslisterr[len(rholist)-1])
 
 plt.figure()
 plt.subplot(211)
@@ -204,43 +223,60 @@ plt.plot(radiuslist,'.')
 plt.title('radius iterative solution')
 plt.ylabel('r')
 plt.xlabel('Iteration')
-plt.show()
+#plt.show()
 
 asteroid = rholist[len(rholist)-1]*s2
 R1 = earth[threesome[0]]
 R2 = earth[threesome[1]]
 R3 = earth[threesome[2]]
 
+deriv = [1,1,1]
+
 r = R2 + asteroid
+rerr = rvecerr(R2,rholist[len(rholist)-1],s2,rholisterr[len(rholist)-1],s2err)
 
 rmag = radiuslist[len(radiuslist)-1]
 
 R2dot = ((tau3/(tau1*(tau1+tau3)))*(R2-R1)) + ((tau1/(tau3*(tau1+tau3)))*(R3-R2))
 
 rdot = R2dot + rholist[len(rholist)-1]*s2dot + rhovel*s2
+rdoterr = rdotvecerr(R2,rholist[len(rholist)-1],s2,rhovel,s2dot,rholisterr[len(rholist)-1],s2err,rhovelerr,s2doterr)
 
 V = np.linalg.norm(rdot)
+Verr = np.linalg.norm(rdoterr)
 
 a = (rmag*k**2)/((2*k**2)-(rmag*V**2))
+aerr = np.sqrt((((k**2)*(rmag**2)*V)/(2*k**2-rmag*V**2))**Verr)
 
 h = np.cross(r,rdot)
+herr = np.sqrt((np.cross(deriv,rdot)*rerr)**2+(np.cross(r,deriv)*rdoterr)**2)
 
 hx,hy,hz = h
+hxerr,hyerr,hzerr = herr
 
 hmag = np.linalg.norm(h)
+hmagerr = np.linalg.norm(herr)
 
 Omega = np.arctan2(-hx,hy)
+Omegaerr = np.arctan2(-hxerr,hyerr)
 Omega += np.pi
 inc = np.arccos(hz/hmag)
+incerr = np.arccos(hzerr/hmagerr)
 e = np.sqrt(1-((hmag**2)/(a*k**2)))
+e_err = np.sqrt(-(1-((hmagerr**2)/(aerr*k**2))))
 E = np.arccos((a-rmag)/(a*e))
+Eerr = np.arccos((aerr-radiuslisterr[9])/(aerr*e_err))
 Eval = E
 nu = trueanomaly(e,E)
+nuerr = trueanomaly1(e_err,Eerr)
 M = meananomalyE(E,e)
+Merr = meananomalyE(Eerr,e_err)
 sumnu = np.arccos((r[0]*np.cos(Omega)+r[1]*np.sin(Omega))/rmag)
+sumnuerr = np.arccos((rerr[0]*np.cos(Omegaerr)+rerr[1]*np.sin(Omegaerr))/radiuslisterr[9])
 omega = sumnu-nu
 n = np.sqrt((k**2)/(a**3))
 tau = Julian[threesome[1]]-(M/n)
+tauerr = (Merr/n)
 
 period = (2*np.pi)/n
 
@@ -277,7 +313,7 @@ plt.xlabel('Julian Day - 2450000')
 plt.ylabel('Anomaly [radians]')
 plt.title('Anomaly Over Time')
 plt.legend(loc='best')
-plt.show()
+#plt.show()
 
 #FIGURE 4
 
@@ -293,7 +329,7 @@ plt.xlabel('Julian Day - 2450000')
 plt.ylabel('v [radians]')
 plt.title('True Anomaly Over Time')
 plt.tight_layout()
-plt.show()
+#plt.show()
 
 #FIGURE 5
 
@@ -307,7 +343,7 @@ plt.xlabel('x [AU]')
 plt.ylabel('y [AU]')
 plt.legend()
 plt.title('Position of Urania in its Orbital Plane')
-plt.show()
+#plt.show()
 
 time = Julian[threesome[3]]
 
@@ -363,27 +399,3 @@ x,y,z = rhos[0]
 alpha = np.arctan2(y,x)
 
 delta = np.arcsin(z/rho)
-
-
-#ACTUAL VALUES FOR COMPARISON FROM JPL
-#TAKEN ON OBS DATES AT 00:00:00
-
-
-#ECCENTRICITY
-EC = [1.275359615272396E-01,1.275343210138625E-01,1.275310382572875E-01,1.275293963871802E-01,1.275211899101980E-01]
-
-#INCLINATION (degrees)
-IN = [2.097732695402319E+00,2.097736408425084E+00,2.097743828715460E+00,2.097747535309888E+00,2.097766019178402E+00]
-
-#LONGITUDE OF ASCENDING NODE (degrees)
-OM = [3.076585457653067E+02,3.076584072168451E+02,3.076581353612914E+02,3.076580020201885E+02,3.076573605379849E+02]
-
-#ARGUMENT OF PERIAPSE (degrees)
-W = [8.675755976552506E+01,8.675692407772503E+01,8.675564998998844E+01,8.675501163863163E+01,8.675180796517867E+01]
-
-#TIME OF PERIAPSE (Julian Day)
-Tp = [2455833.225739588961,2455833.223487879615,2455833.218989328947,2455833.216742530465,2455833.205534818582]
-
-#SEMI-MAJOR AXIS
-A = [2.365658853240622E+00,2.365652760888053E+00,2.365640563109902E+00,2.365634458983918E+00,2.365603913071018E+00]
-

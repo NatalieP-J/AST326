@@ -83,7 +83,7 @@ Though this lab was a cooperative effort, being provided with all the data precu
 \section{Data Reduction and Methods}
 \label{sec:data}
 
-The primary mathematical procedure used to determine the orbits of the two asteroids was Laplace's method. This analysis requires only three position measurements within a suitable time period to derive an orbit, although it is limited to a case where a smaller body is orbitting a much larger one. The first step is to convert the observed coordinates into Cartesian ecliptic coordinates. Since both Ceres and Urania had only angular coordinates, the result could only be a unit vector, since the distance from the Earth to the asteroid was one of the unknown parameters. In the case of Ceres, the coordinates were given in ecliptic latitute and longitude, and were easily converted to Cartesian coordinates via a transformation from spherical coordinates. However, the Urania coordinates were in geocentric right ascension and declination (Table~\ref{tab:coords}).
+The primary mathematical procedure used to determine the orbits of the two asteroids was Laplace's method, implemented with Python code. This analysis requires only three position measurements within a suitable time period to derive an orbit, although it is limited to a case where a smaller body is orbitting a much larger one. The first step is to convert the observed coordinates into Cartesian ecliptic coordinates. Observations usually take place in coordinates determined by the equatorial plane of the Earth, but the ecliptic plane is defined to be the plane containing the orbit of the Earth around the Sun. Since both Ceres and Urania had only angular coordinates, the transformed result could only be a unit vector, since the distance from the Earth to the asteroid was one of the unknown parameters. In the case of Ceres, the coordinates were given in ecliptic latitute and longitude, and were easily converted to Cartesian coordinates via a transformation from spherical coordinates. However, the Urania coordinates were in geocentric right ascension and declination (Table~\ref{tab:coords}).
 
 \begin{table}[!htbp]
   \centering
@@ -131,15 +131,15 @@ There was some error associated with caculating the coordinates in Table~\ref{ta
     \label{tab:pixresid}
 \end{table}
 
-\begin{wrapfigure}{L}{2in}
+\begin{wrapfigure}{R}{2in}
 \includegraphics[scale = 0.3]{vectors.png}
-\caption{The vector setup used to solve for the asteroid's position relative to the sun.}
+\caption{The vector setup used to solve for the asteroid's position relative to the Sun.}
 \label{fig:vectors}
 \end{wrapfigure}
 
 The errors in Table~\ref{tab:pixresid} are already much larger than the residuals between the JPL ephemeris coordinates and those measured from the Dunlap Telescope observations listed in Table~\ref{tab:coords}. These smaller values were processed through all of the transformations needed evaluate orbital elements to demonstrate how even a small deviation from the correct values produces huge discrepancies in the final results.
 
-Proceeding to evaluate the magnitudes of the vector setup as shown in Figure~\ref{fig:vectors} required that all positions be known in the ecliptic plane. Equatorial Cartesian coordinates for Urania were determined from the right ascension and declination values using the same spherical coordinates transformation that had been applied to the Ceres corordinates. Since the equatorial plane of the earth intersects the ecliptic plane at 23.44$^o$, the resulting equatorial coordinates were multiplied by a rotation matrix that corresponded to such a rotation about the mutual x-axis where the two planes intersect.
+Proceeding to evaluate the magnitudes of the vector setup as shown in Figure~\ref{fig:vectors} required that all positions be known in the ecliptic plane. This would result in an equation for the asteroid's position relative to the sun, $\mathbf{r} = \mathbf{R} + \rho\mathbf{s}$. Equatorial Cartesian coordinates for Urania were determined from the right ascension and declination values using the same spherical coordinates transformation that had been applied to the Ceres corordinates. Since the equatorial plane of the earth intersects the ecliptic plane at 23.44$^o$, the resulting equatorial coordinates were multiplied by a rotation matrix that corresponded to such a rotation about the mutual x-axis where the two planes intersect.
 
 The position unit vectors were an excellent start, but to proceed further, information about the speed and acceleration of the asteroid was required. To find this information, the first and third of the unit vectors were expressed as Taylor series expansions about the second unit vector ($\mathbf{s_2}$). These two equations were then rearranged to find expressions for the instantaneous velocity ($\mathbf{\dot{s}_2}$) and acceleration vectors ($\mathbf{\ddot{s}_2}$) at the time the of the second measurement. This information, accompanied by measurements of the Earth's position relative to the sun in ecliptic Cartesian coordinates ($\mathbf{R}$~\citep{urania}), was nearly enough to determine the position of the asteroid relative to the sun. It was this position that would ultimately be required in order to predict the asteroid's motion, because it was the sun that was at one of the focii of that orbit. Of course, finding this position would be a matter of simple vector addition if the magnitude of the Earth-asteroid vector was known.
 
@@ -154,146 +154,135 @@ r^2 = \rho^2 + R^2 + 2\rho\mathbf{R}\cdot\mathbf{s}\\
 \label{eqn:rhodot}
 \end{eqnarray}
 
-In these equations $k = \sqrt{GM_{total}}$, where $G$ is the gravitational constant and $M_{total} \approx M_{sun}$, since $M_{sun} >> M_{earth} >> M_{asteroid}$. $\rho$ is the magnitude of the Earth-asteroid vector, and $r$ is the magnitude of the Sun-asteroid vector. Iteratively solving for these two values using Equations~\ref{eqn:rho} and~\ref{eqn:radius} provided the final pieces needed to determine the position of the asteroid relative to the Sun in ecliptic Cartesian coordinates.
+In these equations $k = \sqrt{GM_{total}}$, where $G$ is the gravitational constant and $M_{total} \approx M_{sun}$, since $M_{sun} >> M_{earth} >> M_{asteroid}$. $\rho$ is the magnitude of the Earth-asteroid vector, and $r$ is the magnitude of the Sun-asteroid vector.  Iteratively solving for these two values using Equations~\ref{eqn:rho} and~\ref{eqn:radius} provided the final pieces needed to determine the position of the asteroid relative to the Sun in ecliptic Cartesian coordinates. The equations were evaluated when $\mathbf{s} = \mathbf{s_2}$ (the third epoch of observations), since that was the only time for which $\mathbf{s_2}$, $\mathbf{\dot{s}_2}$ and $\mathbf{\ddot{s}_2}$ were all known.
 
-When using the observed coordinates,
-
-
+When using the observed coordinates for Urania, the values for $r$ and $\rho$ deviated significantly from those given in the ephemeris for Urania. The propagated residuals from Table~\ref{tab:coords} had grown to be of the same order of magnitude as $r$ and $\rho$ themselves. The consequences of this are explored further in Section~\ref{sec:discussion}. However, it is important to note that even the small deviations from the expected locations produced very problematic results, and so the remainder of the report is carried out on these observed locations as well as those from the ephemeris.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Calculations and Modelling}
 \label{sec:calc}
 
-\begin{wrapfigure}{R}{4in}
-\includegraphics[scale = 0.15]{orbitalelements2.png}
-\caption{A diagram illustrating the Keplerian orbital elements \citep{elements}}
+\begin{wrapfigure}{L}{3.2in}
+\includegraphics[scale = 0.12]{orbitalelements2.png}
+\caption{A diagram illustrating the some \\of the Keplerian orbital elements \citep{elements}}
 \label{fig:elements}
 \end{wrapfigure}
 
-After the preliminary work of obtaining the asteroid positions at each epoch, it was possible to define the orbit according to it's Keplerian orbital elements. These elements are, for the most part, illustrated in Figure~\ref{fig:elements}. It was assumed that the orbit of the asteroid was a simple ellipse with the Sun at one of the focci. To characterize the orbit, quite a few parameters were needed. The semi-major axis ($a$, Equation~\ref{eqn:semimajor}), and eccentricity ($e$, Equation~\ref{eqn:eccentricity}), are familiar features of any ellipse. The mean anomaly, eccentric anomaly and true anomaly are all angles that descrive the current position of the asteroid in its orbit
+After the preliminary work of obtaining the asteroid positions at each epoch, it was possible to define the orbit according to it's Keplerian orbital elements. These elements are, for the most part, illustrated in Figure~\ref{fig:elements}. It was assumed that the orbit of the asteroid was a simple ellipse with the Sun at one of the focci. To characterize the orbit, quite a few parameters were needed. The semi-major axis ($a$, Equation~\ref{eqn:semimajor}), and eccentricity ($e$, Equation~\ref{eqn:eccentricity}), are familiar features of any ellipse. 
 
-
-
-\begin{equation}
-a = \frac{k^2r}{2k^2-rV^2}
+\begin{eqnarray}
 \label{eqn:semimajor}
-\end{equation}
-
-\begin{equation}
-tan\Omega = \frac{-h_x}{h_y}
-\label{eqn:ascendingnode}
-\end{equation}
-
-\begin{equation}
-cosi = \frac{h_z}{h}
-\label{eqn:inclination}
-\end{equation}
-
-\begin{equation}
-e = \sqrt{1-(h^2/ak^2)}
+a &=& \frac{k^2r}{2k^2-rV^2}\\
 \label{eqn:eccentricity}
-\end{equation}
+e &=& \sqrt{1-(h^2/ak^2)}
+\end{eqnarray}
 
-\begin{equation}
-cosE = \frac{a-r}{ae}
+
+The next two parameters are shown in Figure~\ref{fig:elements}, and define the plane of the asteroid's orbit relative to ecliptic plane. In order to determine them, a vector perpendicular to the plane was required. This vector, called angular momentum ($\mathbf{h} = (h_x,h_y,h_z)$), was defined using the simple fact that the cross product of any two vectors must be perpendicular to those vectors: $\mathbf{h} = \mathbf{r}\times\mathbf{\dot{r}}$. The position and velocity vector define the plane because position has only a radial component, and velocity has only a perpendicular tangential component. The inclination ($i$, Equation~\ref{eqn:inclination}), labelled I in the figure, is the tilt of the orbit with respect to the plane. The longitude of ascending node ($\Omega$, Equation~\ref{eqn:ascendingnode}), is the angle between the direction to the vernal equinox and the line of intersection between the the orbital and ecliptic planes.
+
+\begin{eqnarray}
+\label{eqn:inclination}
+cosi &=& h_z/h\\
+\label{eqn:ascendingnode}
+tan\Omega &=& -h_x/h_y
+\end{eqnarray}
+
+To find the remaining orbital elements, three independent variables are required. The eccentric anomaly, mean anomaly and true anomaly are all describe the current position of the asteroid in its orbit. Eccentric anomaly ($E$, Equation~\ref{eqn:eccentricanomaly}) is the angular location of the asteroid with respect to its current radius vector if it were projected on an auxillary circle with radius $a$. It is defined to be zero at the perihelion, and so increases when moving towards aphelion. The mean anomaly ($M$, Equation~\ref{eqn:meananomaly}) increases from 0 to 2$\pi$ uniformly in the time it takes the asteroid to complete one orbit. The true anomaly ($\nu$, Equation~\ref{eqn:trueanomaly}), is the angle between the current radius vector of the asteroid and its radius vector when at perihelion.
+
+\begin{eqnarray}
 \label{eqn:eccentricanomaly}
-\end{equation}
-
-\begin{eqnarray}
-\label{eqn:trueanomaly}
-tan\left(\frac{\nu}{2}\right) = \sqrt{\frac{1+e}{1-e}}tan\left(\frac{E}{2}\right)\\\
-cos(\nu+\omega) = \frac{xcos\Omega + ysin\Omega}{r}
-\label{eqn:argperihelion}
-\end{eqnarray}
-
-\begin{eqnarray}
+cosE &=& \frac{a-r}{ae}\\
 \label{eqn:meananomaly}
-M = E - esinE\\\
-\tau = t - \frac{M}{n}
-\label{eqn:timeperihelion}
+M(E) &=& E - esinE\\
+\label{eqn:trueanomaly}
+tan\left(\frac{\nu}{2}\right) &=& \sqrt{\frac{1+e}{1-e}}tan\left(\frac{E}{2}\right)
 \end{eqnarray}
+
+Calculating $M$,$E$ and $\nu$ at the time of the second epoch of observation of the three selected for Laplace's method allowed for the calculation of the final two orbital elements. The argument of perihelion ($\omega$, Equation~\ref{eqn:argperihelion}), is the counterclockwise angle between the intersection line of the orbital and ecliptic planes and the radius vector at perihelion. The time of perihelion ($\tau$, Equation~\ref{eqn:timeperihelion}), is the Julian Day at which perihelion is reached.
+
+\begin{eqnarray}
+\label{eqn:argperihelion}
+cos(\nu+\omega) &=& \frac{xcos\Omega + ysin\Omega}{r}\\
+\label{eqn:timeperihelion}
+\tau &=& t - M/n
+\end{eqnarray}
+
+The equations described above were used to find the orbital elements for Urania and Ceres. Since all information about Ceres (included expected results of the above process) was included in the lab handout, it will not be reiterated here. After ascertaining that the process had produced results matching those in the handout, the elements were calculated for Urania (Table~\ref{tab:elements}). The true values were found on the JPL database, for the sake of comparison.
 
 \begin{table}[!htbp]
 	\centering
-	\begin{tabular}{c||c||c||c||c||c||c}
+	\begin{tabular}{|c||c||c||c||c||c||c|}
 	\hline
 	Source & a (AU) & $\Omega$ ($^o$) & i ($^o$) & e & $\omega$ ($^o$) & $\tau$ (Julian Day)\\
 	\hline
+  \hline
 	True & 2.3650 & 307.93 & 2.0985 & 0.1275 & 86.277 & 2451845\\
 	\hline
 	JPL & 2.2871 & 308.27 & 2.0841 & 0.1162 & 74.199 & 2455800\\
 	\hline
-	Observed & 1.2640 & 336.39 & 1.5483 & 0.4511 & 304.87 & 2455754\\
+	Observed & 1.2640 & 336.39 & 1.5483 & 0.4511 & 304.87 & 2455754 \\
+  \hline
+  Uncertainty & $\pm$ 0.7744 & $\pm$ 74.62 & $\pm$ 1.5172 & $\pm$ 10.36 & $\pm$ 130.2 & $\pm$ 605.5\\
+  \hline
 	\end{tabular}
-	\caption{}
+	\caption{The orbital elements of Urania. The row labelled JPL is the results of calculating the elements with the ephemeris positions of the asteroid, while the following row is elements as calculated from the observed positions from Table~\ref{tab:coords}. The row of uncertainties represents the results of propogating the residuals from Table~\ref{tab:coords} through the entire set of equations.}
 	\label{tab:elements}
 \end{table}
 
-FOV of DI Telescope calculated to be 36.7 arcminutes - not difference so large as to be invisible at the edge. only so good because relatively soon prediction
-
-$\alpha_{JPL}$ = 03:07:15.92, $\delta_{JPL}$ = +19:28:59.7 
-$\alpha_{true}$ = 03:06:41.94, $\delta_{true}$ = +19:37:23.1
-$\alpha_{obs}$ = 03:08:14.67, $\delta_{obs}$ = +19:43:59.6
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Discussion}
-\label{sec:discussion}
-
-\begin{figure}[!htbp]
-\centering
-\begin{subfigure}{0.5\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{JPLAnomaly.png}
-  \caption{}
-  \label{fig:sub1}
-\end{subfigure}%
-\begin{subfigure}{0.5\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{UraniaAnomaly.png}
-  \caption{}
-  \label{fig:sub2}
-\end{subfigure}
-\caption{}
-\label{fig:failedFS}
-\end{figure}
-
-\begin{figure}[!htbp]
-\centering
-\begin{subfigure}{0.5\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{JPLOrbitalSeparation.png}
-  \caption{}
-  \label{fig:sub1}
-\end{subfigure}%
-\begin{subfigure}{0.5\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{UraniaOrbitalSeparation.png}
-  \caption{}
-  \label{fig:sub2}
-\end{subfigure}
-\caption{}
-\label{fig:failedFS}
-\end{figure}
-
+Having calculated the six Keplerian orbital elements with Laplace's method, it was possible to predict the orbit of both asteroids. Again, the results of this process for Ceres were matched with those in the handout and will not be included. The predicted orbit for Urania is showing in Figure~\ref{fig:Orbit}. The curve shown is the motion of Urania as it appears in the orbital plane.
 
 \begin{figure}[!htbp]
 \centering
 \begin{subfigure}{0.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{JPLOrbitalPlane.png}
-  \caption{}
-  \label{fig:sub1}
+  \caption{JPL Ephemeris locations}
+  \label{fig:JPLOrbit}
 \end{subfigure}%
 \begin{subfigure}{0.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{UraniaOrbitalPlane.png}
-  \caption{}
-  \label{fig:sub2}
+  \caption{Observed locations}
+  \label{fig:UraniaOrbit}
 \end{subfigure}
-\caption{}
-\label{fig:failedFS}
+\caption{The predicted orbit of Urania based on the orbital elements in Table~\ref{tab:elements}}
+\label{fig:Orbit}
 \end{figure}
+
+Creating this prediction required the numerical solution of Kepler's equation (Equation~\ref{eqn:meananomaly}). Finding the Taylor expansion of this equation about some $E_n+\delta E$ and solving for $\delta E$ in the first order term means that it is possible to step through eccentric anomaly over time by assuming that $E_{n+1} = E_n + \delta E$. This value of $E$ was then used to find $\nu$ for each time in the orbit using Equation~\ref{eqn:trueanomaly}, while the corresponding radius was calculated using $r = a(1-ecosE)$. With a correction to the polar angle $\theta$ in that $\theta = \nu + \omega$, the entire orbit could be described parametrically as $x = rcos\theta$, $y = rsin\theta$. The Python implementation of this numerical method is included in Appendix~\ref{app:kepler}.
+
+With an entire predicted orbit, it was a simple matter to test the usefulness and accuracy of the method by attempting to predict the position of Urania at a particular date. Since the time array used in orbital predictions took whole day steps, a Julian day of 2455956 was chosen as being roughly similar to the final day of Urania observations. However, the prediction is most useful if it can inform the Earthbound observer of the asteroid's position in a convenient coordinate system. To that end the x and y coordinates as defined above were found for the selected time and composed into a vector $\mathbf{r} = [x,y,0]$. Since this vector was in the plane of the orbit, it was first transformed to the ecliptic plane by multiplying it by two rotation matrices. The first rotated the vector around the x-axis of the plane (the line of nodes in Figure~\ref{fig:elements}) by the inclination, while the second rotated it around the z-axis of ecliptic by longitude of ascending node.
+
+While the ecliptic plane is familiar, the it is not ideal for observations from the planets surface. So the vector was rotated about the x-axis a final time, this time at the angle of 23.44$^o$, the tilt of the Earth's rotation axis with respect to the ecliptic. This resulted in a Cartesian vector, which was transformed to right ascension and declination via $tan\alpha = y_{eq}/x_{eq}$ and $sin\delta = z_{eq}$.
+The results are shown below, along with the actual coordinates for that date for the sake of comparison. As usual, a `JPL' subscript denotes an answer arrived at by using the ephemeris locations, while an `obs' subscript indicates an answer that came from using observed Urania locations.
+
+\begin{eqnarray}
+\alpha_{true} = 03:06:41.94, & \delta_{true} = +19:37:23.1 \nonumber\\
+\alpha_{JPL} = 03:07:15.92, & \delta_{JPL} = +19:28:59.7 \nonumber\\
+\alpha_{obs} = 03:08:14.67, & \delta_{obs} = +19:43:59.6 \nonumber
+\end{eqnarray}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Discussion}
+\label{sec:discussion}
+
+The errors in completing this lab are glaringly obvious in Section~\ref{sec:calc}, but their source is still somewhat murky. The discrepancy between the measured and expected coordinates of Urania was on the order of 1-3 arcseconds for the chosen epochs, but resulted in widely different final results. Figure~\ref{fig:Orbit} compares the two, and it is clear that they result in very different orbits.
+
+A possible source of this divergence lies in Laplace's method itself. Much of the work done to predict the orbit of Urania was simply coordinate transformations, processes that should not exacerbate an error in position. However, one step sensitive to exact position would be the Taylor expansion needed to find instantaneous velocity and acceleration for the second epoch. 
+
+Were the motion of the asteroid mostly linear, determining velocity and acceleration from three points would not be a poor approximation at all. However, the goal of this lab was to extrapolate complex orbital motion from only three data points. Given more time, the prediction would certainly be improved by incorporating more position measurements. This would also necessitate reexamining the plate constant calculations for the first and fifth epochs of Urania measurements. Those days showed much larger residuals than the central three (Table~\ref{tab:pixresid}, which is why it was those three that were chosen for the calculation of the orbital elements. 
+
+In any case, it is clear the even slight deviations result in large inaccuracies in the orbital elements. This process of orbital determination needs very accurate astrometry indeed in order to be successful.
+
+Despite this apparently obvious problem, the resulting predictions from the observed locations seem quite accurate, or at least not much worse than their ephemeris counterparts. The predicted coordinates for Julian day 2455956 listed at the end of Section~\ref{sec:calc} vary by a maxmum of two minutes in right ascension and nine arcminutes in declination from the actual value. 
+
+The reason that the observed coordinates predictions remain even remotes accurate is of course that the orbit, while grossly inaccurate on the whole, is quite correct in the region where the measurements were taken. No matter how wild the rest of the predicted trajectory, the results are constrained to fitting at least the three chosen points. If a time much further along in the orbit had been chosen, the observed coordinates prediction would have been desperately inaccurate.
+
+However, Urania could be observed with the Dunlap Institute Telescope given either of the predicted coordinates. In the previous lab, the field of view of the telescope was calculated to be 36.7 arcminutes. This is more than enough to account for the discrepancy between the predicted location and the asteroid's actual position.
+
+
+time = 2455956.0
 
 
 \bibliographystyle{plainnat}
@@ -319,13 +308,14 @@ The CCD detector used to observe Urania was not an ideal detector. The pixel coo
 The $a_{i}$s in $\mathbf{T}$ are the plate constants. In an ideal case, $\mathbf{T}$ would be the identity matrix, with the final column's two zeroes produced by the central pixel coordinates, $x_{0} = 1024, y_{0} = 1024$. However, solving for the $a_{i}$s produced slightly different results, and it was these plate constants that were used to calculate the position of Urania on each night. The position uncertainty in pixels is listed in Table~\ref{tab:pixresid}
 
 \section{Numerical Solution of Kepler's Equation}
+\label{app:kepler}
 
 The code below calls multiple functions, which correspond to specific equations listed in the report. The meananomalytime function is Equation~\ref{eqn:timeperihelion} rearranged for M. meananomalyE cooresponds to Equation~\ref{eqn:meananomaly}, and trueanomaly is Equation~\ref{eqn:trueanomaly} solved for $\nu$. ellipseradius is not specified in the body of the text, but is given by $r=a(1-ecosE)$.
 
 \footnotesize\begin{verbatim}
 #Calculate the orbital period from Kepler's third law
 
-n = np.sqrt((k**2)/(a**3)) 
+n = np.sqrt((k**2)/(a**3)) #n = mean motion
 period = (2*np.pi)/n
 
 #Generate time intervals
@@ -360,6 +350,48 @@ theta = v+omega #omega = argument of perihelion
 
 x_position = r*np.cos(theta)
 y_position = r*np.sin(theta)
+\end{verbatim}
+\normalsize
+
+\section{Predicting Asteroid Position}
+\footnotesize\begin{verbatim}
+
+epsilon = 23.43929111*(np.pi/180.) #angle of earth's rotation axis with ecliptic plane
+T = [ [1,0,0],
+      [0,np.cos(epsilon),np.sin(epsilon)],
+      [0,-np.sin(epsilon),np.cos(epsilon)]]
+T = np.matrix(T) #rotation matrix
+#use T.T for transformations since inverse(T) = transpose(T)
+
+time = 2455956 #choose a time to predict for
+#access JPL to find Earth's position at chosen time
+Rearth = np.array([-6.172959176680726E-01,  7.674840479224522E-01, -2.337958345652992E-05])
+for i in range(len(JulianDay)): #JulianDay = array of times
+  if np.round(JulianDay[i])==np.round(time):
+    index = i
+
+Mnew = M[index] #prediction mean anomaly
+Enew = E[index] #prediction eccentric anomaly
+v = trueanomaly(e,Enew) #prediction true anomaly
+theta = v+omega #prediction polar angle
+rmag = a*(1-e*np.cos(Enew)) #prediction radial magnitude
+
+rvec = [rmag*np.cos(theta),rmag*np.sin(theta),0] #create the position vector in the orbital plane
+rvec = np.matrix(rvec)
+
+#define the matrix that will rotate the vector into the ecliptic plane
+TzTx = [[np.cos(Omega),-np.sin(Omega)*np.cos(inc),np.sin(Omega)*np.sin(inc)],
+    [np.sin(Omega),np.cos(Omega)*np.cos(inc),-np.cos(Omega)*np.sin(inc)],
+    [0,np.sin(inc),np.cos(inc)]]
+TzTx = np.matrix(TzTx)
+
+r_ecliptic = TzTx*rvec.T #ecliptic vector
+rhos_ecliptic = np.array(r_ecliptic.T) - Rearth #find Earth-asteroid vector
+rhos_equatorial = np.array((T.T*np.matrix(rhos_ecliptic).T).T) #convert to manageable format
+x,y,z = rhos_equatorial[0] #unpack the vector
+alpha = np.arctan2(y,x) #predicted right ascension
+delta = np.arcsin(z/rho) #predicted declination
+
 \end{verbatim}
 \normalsize
 
