@@ -349,6 +349,8 @@ time = Julian[threesome[3]]
 
 Rearth = earth[threesome[3]]
 
+Rearth = [-6.172959176680726E-01,  7.674840479224522E-01, -2.337958345652992E-05]
+
 for i in range(len(JulianDay)):
 	if np.round(JulianDay[i])==np.round(time):
 		index = i
@@ -360,42 +362,50 @@ Enew = E[index]
 v = trueanomaly(e,Enew)
 
 theta = v+omega
+thetaerr = np.sqrt(nuerr**2 + sumnuerr**2)
 
 rmag = a*(1-e*np.cos(Enew))
+rmagerr = aerr*(1-e_err*np.cos(Eerr))
 
 
 rvec = [rmag*np.cos(theta),rmag*np.sin(theta),0]
+rvecerr = [rmagerr*np.cos(thetaerr),rmagerr*np.sin(thetaerr),0]
 
 TzTx = [[np.cos(Omega),-np.sin(Omega)*np.cos(inc),np.sin(Omega)*np.sin(inc)],
 		[np.sin(Omega),np.cos(Omega)*np.cos(inc),-np.cos(Omega)*np.sin(inc)],
 		[0,np.sin(inc),np.cos(inc)]]
 
+TzTxerr = [[np.cos(Omegaerr),-np.sin(Omegaerr)*np.cos(incerr),np.sin(Omegaerr)*np.sin(incerr)],
+		[np.sin(Omegaerr),np.cos(Omegaerr)*np.cos(incerr),-np.cos(Omegaerr)*np.sin(incerr)],
+		[0,np.sin(incerr),np.cos(incerr)]]
+
 TzTx = np.matrix(TzTx)
+TzTxerr = np.matrix(TzTxerr)
 
 rvec = np.matrix(rvec)
+rvecerr = np.matrix(rvecerr)
 
 r_ecliptic = TzTx*rvec.T
-
-r_equatorial = T.T*r_ecliptic
-
-R_earth = T.T*np.matrix(Rearth).T
-
-R_earth = np.array(R_earth.T)
-
-r_equatorial = np.array(r_equatorial.T)
+r_ecliptic_err = TzTxerr*rvecerr.T
 
 rhos = np.array(r_ecliptic.T) - Rearth
+rhoserr = np.array(r_ecliptic_err.T)
 
 rhos = T.T*np.matrix(rhos).T
 
 rhos = np.array(rhos.T)
+
+rhoserr = np.array((T.T*np.matrix(rhoserr).T).T)
 
 rho = np.linalg.norm(rhos)
 
 s = rhos/rho
 
 x,y,z = rhos[0]
+xerr,yerr,zerr = rhoserr[0]
 
 alpha = np.arctan2(y,x)
+alphaerr = np.arctan2(yerr,xerr)
 
 delta = np.arcsin(z/rho)
+deltaerr = np.arcsin(zerr/np.linalg.norm(rhoserr))
